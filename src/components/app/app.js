@@ -14,7 +14,8 @@ class App extends Component {
             this.createNewItem('Eat lunch'),
             this.createNewItem('Code')
          ],
-         pattern: ''
+         pattern: '',
+         filter: 'all' // options: all/active/done
     };
 
     createNewItem(label) {
@@ -45,10 +46,6 @@ class App extends Component {
         });
     };
 
-    //to be refactored as toggleStatus(id, statusName)
-    
-
-    //to be refactored as toggleStatus(array, id, statusName)
     toggleStatus = (array, id, statusName) => {
             const idx = array.findIndex( el => el.id === id);
             const oldItem = array[idx];
@@ -81,18 +78,33 @@ class App extends Component {
         });
     }
 
+    onSwitchFilter = (filterName) => {
+        this.setState({
+            filter: filterName
+        });
+    }
+
     render() {
-        const {items, pattern} = this.state;
+        const {items, pattern, filter} = this.state;
         const doneCount = items.filter(el => el.done === true).length;
         const pendingCount = items.length - doneCount;
-        const visibleItems = items.filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1);
+        const visibleItems = items.filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
+                                .filter(item => {
+                                    if (filter === 'done') {
+                                        return item.done === true
+                                    }
+                                    else if (filter === 'active') {
+                                        return item.done === false
+                                    }
+                                    else return item
+                                });
         
         return(
             <div className="todo-app">
                 <AppHeader toDo={pendingCount} done={doneCount} />
                 <div className="top-panel d-flex">
                     <SearchPanel value={pattern} onSearch={this.searchItems}/>
-                    <ItemStatusFilter/>
+                    <ItemStatusFilter onSwitch={this.onSwitchFilter}/>
                 </div>
                 <TodoList items={visibleItems} onDelete={this.deleteItem} 
                     onToggleDone={this.toggleDone} onToggleImportant={this.toggleImportant}/>
