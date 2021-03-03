@@ -13,7 +13,8 @@ class App extends Component {
             this.createNewItem('Have coffee'),
             this.createNewItem('Eat lunch'),
             this.createNewItem('Code')
-         ]
+         ],
+         pattern: ''
     };
 
     createNewItem(label) {
@@ -72,19 +73,28 @@ class App extends Component {
         }));
     }
 
+    searchItems = (value) => {
+        this.setState( () => {
+            return {
+                pattern: value
+            }
+        });
+    }
+
     render() {
-        const {items} = this.state;
+        const {items, pattern} = this.state;
         const doneCount = items.filter(el => el.done === true).length;
         const pendingCount = items.length - doneCount;
+        const visibleItems = items.filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1);
         
         return(
             <div className="todo-app">
                 <AppHeader toDo={pendingCount} done={doneCount} />
                 <div className="top-panel d-flex">
-                    <SearchPanel />
-                    <ItemStatusFilter />
+                    <SearchPanel value={pattern} onSearch={this.searchItems}/>
+                    <ItemStatusFilter/>
                 </div>
-                <TodoList items={items} onDelete={this.deleteItem} 
+                <TodoList items={visibleItems} onDelete={this.deleteItem} 
                     onToggleDone={this.toggleDone} onToggleImportant={this.toggleImportant}/>
                 <ItemAddForm onAdd={this.addItem}/>
             </div>
