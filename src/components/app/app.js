@@ -4,7 +4,7 @@ import TodoList from '../todo-list/todo-list';
 import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
-import './app.css';
+import './app.scss';
 
 const App = () => {
 

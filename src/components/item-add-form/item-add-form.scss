@@ -3,8 +3,8 @@
   margin-top: 10px;
   display: flex;
   align-items: center;
+  & input {
+    margin-right: 3px;
+  }
 }
 
-.item-add-form input {
-  margin-right: 3px;
-}

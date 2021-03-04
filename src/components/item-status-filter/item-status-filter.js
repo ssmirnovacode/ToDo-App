@@ -1,5 +1,5 @@
 import React from 'react';
-import './item-status-filter.css';
+import './item-status-filter.scss';
 
 const ItemStatusFilter = (props) => {
 

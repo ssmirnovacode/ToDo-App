@@ -2,12 +2,8 @@
 .todo-app {
   margin: 2rem auto 0 auto;
   max-width: 400px;
-}
-
-@media only screen and (max-width: 600px) {
-  .todo-app {
+  @media only screen and (max-width: 600px) {
     margin: 5%;
-    max-width: 400px;
   }
 }
 
