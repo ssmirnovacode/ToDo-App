@@ -26,14 +26,14 @@ const App = () => {
     useEffect( () => {
         reqService.getItems(baseURL + 'items')
         .then( res => {setItems(res); console.log(res)})
-        .catch(e => console.log('Error!'))
-    }, [])
+        .catch(e => console.log('GET error!'))
+    }, [JSON.stringify(items)])
 
     const [pattern, setPattern] = useState('');
 
     const [filter, setFilter] = useState('all');
 
-    const deleteItem = id => { 
+    const deleteItem = id => { // pending DELETE req
         setItems( (items) => {
             const idx = items.findIndex( el => el.id === id);
             return [...items.slice(0, idx), ...items.slice(idx+1)];         
@@ -42,9 +42,12 @@ const App = () => {
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        setItems( (items) => {
+        reqService.postItem(baseURL + 'items', newItem)
+        .then(res => console.log(res))
+        .catch(e => console.log('POST error'));
+        /* setItems( (items) => {
             return [...items, newItem]
-        });
+        }); */
     };
 
     const toggleStatus = (array, id, statusName) => {
