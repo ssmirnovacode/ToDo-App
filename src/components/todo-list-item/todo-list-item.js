@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './todo-list-item.css';
 
-class TodoListItem extends Component {
-
-  render() {
-    const {label, onDelete, onToggleDone, onToggleImportant, important, done} = this.props;
+const TodoListItem = (props) => {
+ 
+    const {label, onDelete, onToggleDone, onToggleImportant, important, done} = props;
     
     let itemClass = 'todo-list-item';
     
@@ -38,8 +37,7 @@ class TodoListItem extends Component {
         </button>
       
       </span>
-    );
-  }
+    );  
 };
 
 export default TodoListItem;
