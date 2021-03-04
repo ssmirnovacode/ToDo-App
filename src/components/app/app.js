@@ -104,7 +104,7 @@ class App extends Component {
                 <AppHeader toDo={pendingCount} done={doneCount} />
                 <div className="top-panel d-flex">
                     <SearchPanel value={pattern} onSearch={this.searchItems}/>
-                    <ItemStatusFilter onSwitch={this.onSwitchFilter}/>
+                    <ItemStatusFilter filter={filter} onSwitch={this.onSwitchFilter}/>
                 </div>
                 <TodoList items={visibleItems} onDelete={this.deleteItem} 
                     onToggleDone={this.toggleDone} onToggleImportant={this.toggleImportant}/>

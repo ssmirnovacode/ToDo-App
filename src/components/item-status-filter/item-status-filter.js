@@ -2,30 +2,27 @@ import React, {Component} from 'react';
 import './item-status-filter.css';
 
 class ItemStatusFilter extends Component {
-  
-  toggleFilter = (e) => {
-    this.props.onSwitch(e.target.id);
 
-    document.querySelector('.btn-info').classList.add('btn-outline-secondary');
-    document.querySelector('.btn-info').classList.remove('btn-info');
-    
-     if (e.target.className.indexOf('btn-info') > -1) {
-       return;
-     }
-     else {
-       e.target.className = 'btn btn-info'
-     }
-  }
   render() {
-    
+
+    const buttons = [
+    {name: "all", label: "All"},
+    {name: "active", label: "Pending"},
+    {name: "done", label: "Done"}
+  ];
+  
     return (
       <div className="btn-group">
-        <button type="button" id="all"
-                className="btn btn-info" onClick={(e) => {this.toggleFilter(e)}}>All</button>
-        <button type="button" id="active"
-                className="btn btn-outline-secondary" onClick={(e) => {this.toggleFilter(e)}}>Pending</button>
-        <button type="button" id="done"
-                className="btn btn-outline-secondary" onClick={(e) => {this.toggleFilter(e)}}>Done</button>
+        {
+          buttons.map(btn => {
+            const isActive = this.props.filter === btn.name;
+            const clazz = isActive ? "btn btn-info" : "btn btn-outline-secondary";
+            return(
+              <button type="button" id={btn.name}
+              className={clazz} onClick={(e) => {this.props.onSwitch(e.target.id)}}>{btn.label}</button>
+            )
+          })
+        }
       </div>
     );
   }
