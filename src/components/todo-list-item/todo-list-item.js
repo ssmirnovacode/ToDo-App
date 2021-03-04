@@ -3,15 +3,8 @@ import './todo-list-item.css';
 
 class TodoListItem extends Component {
 
-  onToggleStatus = (e) => {
-
-    //e.target.classList.toggle('active');
-
-    this.props.onToggleImportant();
-  }
-
   render() {
-    const {label, onDelete, onToggleDone, important, done} = this.props;
+    const {label, onDelete, onToggleDone, onToggleImportant, important, done} = this.props;
     
     let itemClass = 'todo-list-item';
     
@@ -40,7 +33,7 @@ class TodoListItem extends Component {
   
         <button type="button"
                 className={btnClass}
-                onClick={e => this.onToggleStatus(e)} >
+                onClick={onToggleImportant} >
           <i className="fa fa-exclamation" />
         </button>
       
