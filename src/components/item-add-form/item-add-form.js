@@ -14,17 +14,22 @@ export class ItemAddForm extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onAdd(this.state.label);
-        this.setState({
-            label: ''
-        });
+        /* if (this.state.label !== '') { */
+            this.props.onAdd(this.state.label);
+            this.setState({
+                label: ''
+            });
+        /* }
+        else {
+
+        }  */     
     }
 
     render() {
 
         return(
             <form className="item-add-form d-flex" onSubmit={this.onSubmit}>
-                <input type="text" className="form-control" 
+                <input required type="text" className="form-control" 
                     onChange={this.onLabelChange} 
                     placeholder="What needs to be done?"
                     value={this.state.label} />

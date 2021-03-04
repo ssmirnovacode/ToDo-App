@@ -6,7 +6,7 @@
     width: 35px;
     margin: 3px;
   }
-  
+
   .todo-list-item-label {
     margin-left: 1.25rem;
     line-height: 35px;
@@ -20,5 +20,9 @@
   
   .todo-list-item.important .todo-list-item-label {
     font-weight: bold;
-    color: red;
+    color: #d1332e;
   }
+
+.active {
+  background-color: danger;
+}
