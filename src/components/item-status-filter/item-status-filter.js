@@ -18,7 +18,7 @@ class ItemStatusFilter extends Component {
             const isActive = this.props.filter === btn.name;
             const btnClass = isActive ? "btn btn-info" : "btn btn-outline-secondary";
             return(
-              <button type="button" id={btn.name}
+              <button key={btn.name} type="button" id={btn.name}
               className={btnClass} onClick={(e) => {this.props.onSwitch(e.target.id)}}>{btn.label}</button>
             )
           })
