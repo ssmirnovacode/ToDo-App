@@ -1,12 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchPanel from '../search-panel/search-panel';
 import TodoList from '../todo-list/todo-list';
 import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
+import baseURL from '../../assets/baseURL';
+import RequestService from '../../services/requests';
 
 const App = () => {
+
+    const reqService = new RequestService();
 
     const createNewItem = (label) => {
         return {
@@ -17,15 +21,17 @@ const App = () => {
         }
     };
 
-    const [items, setItems] = useState([
-        createNewItem('Have coffee'),
-        createNewItem('Eat lunch'),
-        createNewItem('Code')
-     ]);
+    const [items, setItems] = useState([]);
 
-     const [pattern, setPattern] = useState('');
+    useEffect( () => {
+        reqService.getItems(baseURL + 'items')
+        .then( res => {setItems(res); console.log(res)})
+        .catch(e => console.log('Error!'))
+    }, [])
 
-     const [filter, setFilter] = useState('all');
+    const [pattern, setPattern] = useState('');
+
+    const [filter, setFilter] = useState('all');
 
     const deleteItem = id => { 
         setItems( (items) => {

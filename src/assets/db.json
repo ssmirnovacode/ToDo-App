@@ -1,0 +1,22 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "label": "Drink coffee",
+            "important": false,
+            "done": false
+        },
+        {
+            "id": 2,
+            "label": "Have lunch",
+            "important": false,
+            "done": false
+        },
+        {
+            "id": 3,
+            "label": "Code",
+            "important": false,
+            "done": false
+        }
+    ]
+}
