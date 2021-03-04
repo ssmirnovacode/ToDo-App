@@ -33,11 +33,12 @@ const App = () => {
 
     const [filter, setFilter] = useState('all');
 
-    const deleteItem = id => { // pending DELETE req
-        setItems( (items) => {
-            const idx = items.findIndex( el => el.id === id);
-            return [...items.slice(0, idx), ...items.slice(idx+1)];         
-        });
+    const deleteItem = id => { 
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            reqService.deleteItem(baseURL + 'items/'+ id)
+            .then(res => console.log(`Item deleted`))  //add a message for user
+            .catch(e => console.log('DELETE error!'))
+        }      
     };
 
     const addItem = (label) => { 
@@ -45,9 +46,6 @@ const App = () => {
         reqService.postItem(baseURL + 'items', newItem)
         .then(res => console.log(res))
         .catch(e => console.log('POST error'));
-        /* setItems( (items) => {
-            return [...items, newItem]
-        }); */
     };
 
     const toggleStatus = (array, id, statusName) => {
