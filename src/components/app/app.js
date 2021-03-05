@@ -123,12 +123,12 @@ const App = () => {
             <TodoList items={visibleItems} onDelete={deleteItem} 
                 onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
-        </> : <div>Please log in</div>
+        </> : <div className="mt-2">Please log in</div>
     const userPanel = loggedIn ? 
-        <>
+        <div className="user-panel d-flex">
             <div className="greeting mr-2">Hello, {user}</div> 
-            <button className="btn btn-outline-secondary" onClick={() => setLoggedIn(false)}>Log out</button>
-        </>
+            <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>
+        </div>
         : <UsernameForm onLogin={handleLogin}/>
     return(
         <div className="todo-app">

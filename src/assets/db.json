@@ -55,7 +55,7 @@
     },
     {
       "label": "see the flat",
-      "important": false,
+      "important": true,
       "done": false,
       "id": 0.9963816371608967,
       "owner": "wilson"
