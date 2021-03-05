@@ -1,28 +1,64 @@
 {
   "users": [
+    "lana",
+    "hooves"
+  ],
+  "items": [
     {
-      "id": 1,
-      "name": "Lana",
-      "items": [
-        {
-          "id": 0.5677948740667558,
-          "label": "have coffee",
-          "important": false,
-          "done": false
-        },
-        {
-          "id": 0.20661774436311964,
-          "label": "meditate",
-          "important": true,
-          "done": true
-        },
-        {
-          "label": "code",
-          "important": false,
-          "done": false,
-          "id": 0.03283672869554488
-        }
-      ]
+      "id": 0.5677948740667558,
+      "label": "have coffee",
+      "important": false,
+      "done": true,
+      "owner": "lana"
+    },
+    {
+      "id": 0.20661774436311964,
+      "label": "meditate",
+      "important": true,
+      "done": true,
+      "owner": "lana"
+    },
+    {
+      "label": "code",
+      "important": false,
+      "done": true,
+      "id": 0.03283672869554488,
+      "owner": "lana"
+    },
+    {
+      "label": "clean bathrooms",
+      "important": true,
+      "done": false,
+      "id": 0.04283672869554488,
+      "owner": "hooves"
+    },
+    {
+      "label": "groceries",
+      "important": false,
+      "done": true,
+      "id": 0.05283672869554488,
+      "owner": "hooves"
+    },
+    {
+      "label": "walk",
+      "important": false,
+      "done": false,
+      "id": 0.047865361429258346,
+      "owner": "lana"
+    },
+    {
+      "label": "cook dinner",
+      "important": false,
+      "done": false,
+      "id": 0.045567264989623935,
+      "owner": "hooves"
+    },
+    {
+      "label": "see the flat",
+      "important": false,
+      "done": false,
+      "id": 0.9963816371608967,
+      "owner": "wilson"
     }
   ]
 }
