@@ -13,10 +13,10 @@ export default class RequestService {
     }
 
     async postItem(url, data) {
-        const number = await this.getItemId(); 
+        const number = data.id; 
         const newItem = {
-            id: number, 
-            ...data
+            ...data,
+            id: number
         }
         const res = await fetch(url, {
             method: "POST",
@@ -53,14 +53,5 @@ export default class RequestService {
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
         }
         return await res.json();
-    }
-
-    async getItemId(){
-        const res = await this.getItems(baseURL+'items');
-        let itemId = Math.random().toString();
-        if (!res.find(item => item.id === itemId)) {
-            return itemId;
-        }
-        else this.getItemId();
     }
 }
