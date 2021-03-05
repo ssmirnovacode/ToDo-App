@@ -16,8 +16,8 @@ const App = () => {
         return {
             label,
             important: false,
-            done: false,
-            id: Math.random()
+            done: false/* ,
+            id: Math.random() */
         }
     };
 

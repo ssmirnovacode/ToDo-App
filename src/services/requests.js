@@ -1,3 +1,5 @@
+import baseURL from '../assets/baseURL';
+
 export default class RequestService {
 
     //_baseAPI = 'http://localhost:3001/items/';
@@ -11,12 +13,17 @@ export default class RequestService {
     }
 
     async postItem(url, data) {
+        const number = await this.getItemId(); 
+        const newItem = {
+            id: number, 
+            ...data
+        }
         const res = await fetch(url, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(newItem)
         });
         if (!res.ok) {
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
@@ -46,5 +53,14 @@ export default class RequestService {
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
         }
         return await res.json();
+    }
+
+    async getItemId(){
+        const res = await this.getItems(baseURL+'items');
+        let itemId = Math.random().toString();
+        if (!res.find(item => item.id === itemId)) {
+            return itemId;
+        }
+        else this.getItemId();
     }
 }
