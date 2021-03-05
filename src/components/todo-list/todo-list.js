@@ -3,6 +3,7 @@ import TodoListItem from '../todo-list-item/todo-list-item';
 import './todo-list.scss';
 
 const TodoList = ({items, onDelete, onToggleDone, onToggleImportant}) => {
+
     return(
         <ul className="list-group todo-list">
             {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import SearchPanel from '../search-panel/search-panel';
 import TodoList from '../todo-list/todo-list';
 import AppHeader from '../app-header/app-header';
@@ -23,11 +23,25 @@ const App = () => {
 
     const [items, setItems] = useState([]);
 
+    /* function usePrevious(value) {
+        
+        const ref = useRef();
+        useEffect(() => {
+          ref.current = value;
+        });
+        return ref.current;
+      }
+
+    const prevItems = usePrevious(items);
+    console.log(prevItems); */
+     
     useEffect( () => {
+        let mounted = true;
         reqService.getItems(baseURL + 'items')
-        .then( res => {setItems(res); console.log(res)})
-        .catch(e => console.log('GET error!'))
-    }, [JSON.stringify(items)])
+        .then( res => {mounted && setItems(res); console.log(res)})
+        .catch(() => console.log('GET error!'));
+        return () => mounted = false;
+    }, []);
 
     const [pattern, setPattern] = useState('');
 
@@ -36,15 +50,21 @@ const App = () => {
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             reqService.deleteItem(baseURL + 'items/'+ id)
-            .then(res => console.log(`Item deleted`))  //add a message for user
-            .catch(e => console.log('DELETE error!'))
+            .then(res => {
+                console.log(`Item deleted`); 
+                const idx = items.findIndex( el => el.id === id);
+                setItems([
+                    ...items.slice(0, idx),
+                    ...items.slice(idx+1)
+                ])})  //add a message for user
+            .catch(e => console.log('DELETE error!'));
         }      
     };
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
         reqService.postItem(baseURL + 'items', newItem)
-        .then(res => console.log(res))
+        .then(res => {setItems([...items, newItem]); console.log(items)})
         .catch(e => console.log('POST error'));
     };
 
@@ -83,15 +103,15 @@ const App = () => {
     const doneCount = items.filter(el => el.done === true).length;
     const pendingCount = items.length - doneCount;
     const visibleItems = items.filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
-                            .filter(item => {
-                                if (filter === 'done') {
-                                    return item.done === true
-                                }
-                                else if (filter === 'active') {
-                                    return item.done === false
-                                }
-                                else return item
-                            });
+                                .filter(item => {
+                                    if (filter === 'done') {
+                                        return item.done === true
+                                    }
+                                    else if (filter === 'active') {
+                                        return item.done === false
+                                    }
+                                    else return item
+                                });
     
     return(
         <div className="todo-app">
