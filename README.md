@@ -6,6 +6,7 @@ ToDo app allowing you to:
  - search through the existing items
  - filter items by status (done/pending/all)
 
+You can check out the app here: https://ssmirnovacode.github.io/ToDo-App/
 WARNING! Your data (name and todo items) will NOT be private and will be accessible in a public repo. This is just a prototype of an app, only for demo purposes.
 
 ## Technologies used
