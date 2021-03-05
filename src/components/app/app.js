@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchPanel from '../search-panel/search-panel';
 import TodoList from '../todo-list/todo-list';
 import AppHeader from '../app-header/app-header';
@@ -22,23 +22,11 @@ const App = () => {
     };
 
     const [items, setItems] = useState([]);
-
-    /* function usePrevious(value) {
-        
-        const ref = useRef();
-        useEffect(() => {
-          ref.current = value;
-        });
-        return ref.current;
-      }
-
-    const prevItems = usePrevious(items);
-    console.log(prevItems); */
      
     useEffect( () => {
         let mounted = true;
         reqService.getItems(baseURL + 'items')
-        .then( res => {mounted && setItems(res); console.log(res)})
+        .then( res => {mounted && setItems(res)})
         .catch(() => console.log('GET error!'));
         return () => mounted = false;
     }, []);
@@ -50,7 +38,7 @@ const App = () => {
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             reqService.deleteItem(baseURL + 'items/'+ id)
-            .then(res => {
+            .then(() => {
                 console.log(`Item deleted`); 
                 const idx = items.findIndex( el => el.id === id);
                 setItems([
@@ -64,8 +52,8 @@ const App = () => {
     const addItem = (label) => { 
         const newItem = createNewItem(label);
         reqService.postItem(baseURL + 'items', newItem)
-        .then(res => {setItems([...items, newItem]); console.log(items)})
-        .catch(e => console.log('POST error'));
+        .then(() => setItems([...items, newItem]))
+        .catch(() => console.log('POST error'));
     };
 
     const toggleStatus = (array, id, statusName) => {
@@ -73,23 +61,21 @@ const App = () => {
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
             
-            return [
+            reqService.updateItem(baseURL + 'items/'+ id, updatedItem)
+            .then(() => setItems([
                 ...array.slice(0, idx),
                 updatedItem,
                 ...array.slice(idx+1)
-            ]; 
+                ]))
+            .catch(() => console.log('Status update error!'));        
     };
 
     const toggleDone = id => {  
-        setItems( (items) => {
-            return toggleStatus(items, id, 'done')
-        });
+        toggleStatus(items, id, 'done');
     };
 
     const toggleImportant = id => { 
-        setItems( (items) => {
-            return toggleStatus(items, id, 'important')
-        });
+        toggleStatus(items, id, 'important');
     };
 
     const searchItems = (value) => { 

@@ -24,6 +24,20 @@ export default class RequestService {
         return await res.json();
     }
 
+    async updateItem(url, data) {
+        const res = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+        return await res.json();
+    }
+
     async deleteItem(url) {
         const res = await fetch(url, {
             method: "DELETE"
