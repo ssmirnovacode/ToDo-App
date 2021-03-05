@@ -7,8 +7,11 @@ import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import baseURL from '../../assets/baseURL';
 import RequestService from '../../services/requests';
+import UsernameForm from '../username/username';
 
 const App = () => {
+
+    const path = baseURL + 'users/' + localStorage.getItem('user') + '/';
 
     const reqService = new RequestService();
 
@@ -25,7 +28,7 @@ const App = () => {
      
     useEffect( () => {
         let mounted = true;
-        reqService.getItems(baseURL + 'items')
+        reqService.getItems(path + 'items')
         .then( res => {mounted && setItems(res)})
         .catch(() => console.log('GET error!'));
         return () => mounted = false;
@@ -37,7 +40,7 @@ const App = () => {
 
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
-            reqService.deleteItem(baseURL + 'items/'+ id)
+            reqService.deleteItem(path + 'items/'+ id)
             .then(() => {
                 console.log(`Item deleted`); 
                 const idx = items.findIndex( el => el.id === id);
@@ -51,7 +54,7 @@ const App = () => {
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        reqService.postItem(baseURL + 'items', newItem)
+        reqService.postItem(path + 'items', newItem)
         .then(() => setItems([...items, newItem]))
         .catch(() => console.log('POST error'));
     };
@@ -61,7 +64,7 @@ const App = () => {
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
             
-            reqService.updateItem(baseURL + 'items/'+ id, updatedItem)
+            reqService.updateItem(path + 'items/'+ id, updatedItem)
             .then(() => setItems([
                 ...array.slice(0, idx),
                 updatedItem,
@@ -86,6 +89,11 @@ const App = () => {
         setFilter(filterName);
     }
 
+    const handleLogin = (username) => {
+        localStorage.setItem('user', username);
+
+    }
+
     const doneCount = items.filter(el => el.done === true).length;
     const pendingCount = items.length - doneCount;
     const visibleItems = items.filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
@@ -101,6 +109,7 @@ const App = () => {
     
     return(
         <div className="todo-app">
+            <UsernameForm onLogin={handleLogin}/>
             <AppHeader toDo={pendingCount} done={doneCount} />
             <div className="top-panel d-flex">
                 <SearchPanel value={pattern} onSearch={searchItems}/>
