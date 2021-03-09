@@ -3,9 +3,9 @@ import './todo-list-item.scss';
 
 const TodoListItem = (props) => {
  
-    const {label, onDelete, onToggleDone, onToggleImportant, important, done} = props;
+    const {label, onDelete, onToggleDone, onToggleImportant, important, done, darkmode} = props;
     
-    let itemClass = 'todo-list-item';
+    let itemClass = darkmode ? 'todo-list-item darkmode' : 'todo-list-item';
     
     if (done) {
       itemClass += ' done'

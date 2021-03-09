@@ -143,7 +143,7 @@ const App = () => {
                 <SearchPanel value={pattern} onSearch={searchItems}/>
                 <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
             </div>
-            <TodoList items={visibleItems} onDelete={deleteItem} 
+            <TodoList darkmode={dark} items={visibleItems} onDelete={deleteItem} 
                 onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
         </> 
@@ -162,9 +162,9 @@ const App = () => {
     return(
         <div className={dark ? "todo-app darkmode" : "todo-app"}>
             {userPanel}
-            <div class="dark-toggle custom-control custom-switch mt-3 mb-2">
-                <label class="custom-control-label" htmlFor="customSwitch1">Dark mode</label>
-                <input type="checkbox" class="custom-control-input" id="customSwitch1" 
+            <div className="dark-toggle custom-control custom-switch mt-3 mb-2">
+                <label className="custom-control-label" htmlFor="customSwitch1">Dark mode</label>
+                <input type="checkbox" className="custom-control-input" id="customSwitch1" 
                     value={dark} onChange={toggleDark}/>
             </div>
             {list}

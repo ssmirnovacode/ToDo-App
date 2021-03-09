@@ -2,7 +2,7 @@ import React from 'react';
 import TodoListItem from '../todo-list-item/todo-list-item';
 import './todo-list.scss';
 
-const TodoList = ({items, onDelete, onToggleDone, onToggleImportant}) => {
+const TodoList = ({items, onDelete, onToggleDone, onToggleImportant, darkmode}) => {
 
     return(
         <ul className="list-group todo-list">
@@ -11,10 +11,11 @@ const TodoList = ({items, onDelete, onToggleDone, onToggleImportant}) => {
 
                     const {id, ...itemProps} = item;
                     return(
-                        <li className="list-group-item" key={id}>
+                        <li className={darkmode ? "list-group-item darkmode" : "list-group-item"} key={id}>
                             <TodoListItem {...itemProps} onDelete={() => onDelete(id)}
                                 onToggleImportant= {() => onToggleImportant(id)}
-                                onToggleDone= {() => onToggleDone(id)}/>
+                                onToggleDone= {() => onToggleDone(id)}
+                                darkmode={darkmode}/>
                             </li> //{...item} взяли все ключи item и записали их в одноименные атрибуты
                     )
                 })

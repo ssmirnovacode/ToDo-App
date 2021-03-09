@@ -1,5 +1,3 @@
-import baseURL from '../assets/baseURL';
-
 export default class RequestService {
 
     //_baseAPI = 'http://localhost:3001/items/';
