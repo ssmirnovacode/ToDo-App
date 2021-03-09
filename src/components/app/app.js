@@ -34,6 +34,8 @@ const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const [dark, setDark] = useState(false);
+
     //==============Methods ====================================================
 
     const createNewItem = (label) => {
@@ -102,6 +104,10 @@ const App = () => {
         setLoggedIn(true);
     }
 
+    const toggleDark = () => {
+        dark ? setDark(false) : setDark(true);
+    };
+
     // ===== Rendering variables ===============
     const visibleItems = items.filter(item => item.owner === user)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
@@ -120,10 +126,13 @@ const App = () => {
 
     // ===== User panel viewed after login ===============
     const userPanel = loggedIn ? 
-        <div className="user-panel d-flex">
-            <div className="greeting mr-2">Hello, {user}</div> 
-            <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>
-        </div>
+         <>
+            <div className="user-panel d-flex">
+                <div className="greeting mr-2">Hello, {user}</div> 
+                <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>            
+            </div>
+            
+        </>
         : null;
 
     // ===== Todo list view based on if logged in or not ===============
@@ -146,9 +155,18 @@ const App = () => {
                 <br/><span>Please note that our todo items will be available to anyone who logs in with your username</span></div>
         </>
 
+    // ===== Styling ===============
+
+
+
     return(
-        <div className="todo-app">
+        <div className={dark ? "todo-app darkmode" : "todo-app"}>
             {userPanel}
+            <div class="dark-toggle custom-control custom-switch mt-3 mb-2">
+                <label class="custom-control-label" htmlFor="customSwitch1">Dark mode</label>
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" 
+                    value={dark} onChange={toggleDark}/>
+            </div>
             {list}
         </div>
     )

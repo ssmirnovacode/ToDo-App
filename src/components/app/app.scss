@@ -4,15 +4,12 @@
   max-width: 600px;
   padding: 2% 3%;
 
-  background-color: black;
-  color: white;
+  /* background-color: black;
+  color: white; */
 
   @media only screen and (max-width: 600px) {
     margin: 0;
     padding: 3% 5%;
-    body {
-      background-color: #fff;
-    }
   }
 
   &.darkmode{
@@ -43,4 +40,8 @@
 .descr>span {
   font-size: 0.8rem;
   color: tomato;
+}
+
+.dark-toggle {
+  text-align: right;
 }
