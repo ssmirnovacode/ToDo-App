@@ -17,7 +17,7 @@ const TodoListItem = (props) => {
     const btnClass = important ? "btn btn-outline-danger btn-sm float-right mr-2 active" : "btn btn-outline-danger btn-sm float-right mr-2";
   
     return (
-      <span className={itemClass}>
+      <div className={itemClass}>
         <span
           className="todo-list-item-label"
           onClick={onToggleDone}>
@@ -36,7 +36,7 @@ const TodoListItem = (props) => {
           <i className="fa fa-exclamation" />
         </button>
       
-      </span>
+      </div>
     );  
 };
 

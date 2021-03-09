@@ -15,16 +15,6 @@ const App = () => {
 
     const reqService = new RequestService();
 
-    const createNewItem = (label) => {
-        return {
-            label,
-            important: false,
-            done: false,
-            id: Math.random(),
-            owner: localStorage.getItem('user')
-        }
-    };
-
     //==============State hooks====================================================
 
     const [items, setItems] = useState([]);
@@ -45,6 +35,17 @@ const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     //==============Methods ====================================================
+
+    const createNewItem = (label) => {
+        return {
+            label,
+            important: false,
+            done: false,
+            id: Math.random(),
+            owner: localStorage.getItem('user')
+        }
+    };
+
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             reqService.deleteItem(baseURL + 'items/' + id)
@@ -66,7 +67,7 @@ const App = () => {
         .catch(() => console.log('POST error'));
     };
 
-    const toggleStatus = (array, id, statusName) => { //can be oursourced!!!!!!
+    const toggleStatus = (array, id, statusName) => { 
             const idx = array.findIndex( el => el.id === id);
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
@@ -117,6 +118,7 @@ const App = () => {
     const doneCount = visibleItems.filter(el => el.done === true).length;
     const pendingCount = visibleItems.length - doneCount;
 
+    // ===== User panel viewed after login ===============
     const userPanel = loggedIn ? 
         <div className="user-panel d-flex">
             <div className="greeting mr-2">Hello, {user}</div> 
@@ -124,6 +126,7 @@ const App = () => {
         </div>
         : null;
 
+    // ===== Todo list view based on if logged in or not ===============
     const list = loggedIn ? 
         <>
             <AppHeader toDo={pendingCount} done={doneCount} />

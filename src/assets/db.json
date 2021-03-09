@@ -7,15 +7,15 @@
     {
       "id": 0.5677948740667558,
       "label": "have coffee",
-      "important": false,
-      "done": false,
+      "important": true,
+      "done": true,
       "owner": "lana"
     },
     {
       "id": 0.20661774436311964,
       "label": "meditate",
       "important": false,
-      "done": false,
+      "done": true,
       "owner": "lana"
     },
     {
@@ -68,10 +68,10 @@
       "owner": "Lana"
     },
     {
-      "label": "Check out Firebase",
-      "important": true,
-      "done": false,
-      "id": 0.13861114490870374,
+      "label": "drink chai",
+      "important": false,
+      "done": true,
+      "id": 0.5327968567822332,
       "owner": "lana"
     }
   ]
