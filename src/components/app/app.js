@@ -117,6 +117,13 @@ const App = () => {
     const doneCount = visibleItems.filter(el => el.done === true).length;
     const pendingCount = visibleItems.length - doneCount;
 
+    const userPanel = loggedIn ? 
+        <div className="user-panel d-flex">
+            <div className="greeting mr-2">Hello, {user}</div> 
+            <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>
+        </div>
+        : <UsernameForm onLogin={handleLogin}/>
+
     const list = loggedIn ? 
         <>
             <AppHeader toDo={pendingCount} done={doneCount} />
@@ -127,18 +134,17 @@ const App = () => {
             <TodoList items={visibleItems} onDelete={deleteItem} 
                 onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
-        </> : <div className="mt-2">Please log in</div>
-
-    const userPanel = loggedIn ? 
-        <div className="user-panel d-flex">
-            <div className="greeting mr-2">Hello, {user}</div> 
-            <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>
-        </div>
-        : <UsernameForm onLogin={handleLogin}/>
+        </> 
+        : 
+        <>
+            <h1>ToDo List</h1>
+                {userPanel}
+            <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
+                <br/><span>Please note that our todo items will be available to anyone who logs in with your username</span></div>
+        </>
 
     return(
         <div className="todo-app">
-            {userPanel}
             {list}
         </div>
     )
