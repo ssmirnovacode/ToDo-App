@@ -8,21 +8,14 @@
       "id": 0.5677948740667558,
       "label": "have coffee",
       "important": false,
-      "done": true,
+      "done": false,
       "owner": "lana"
     },
     {
       "id": 0.20661774436311964,
       "label": "meditate",
-      "important": true,
-      "done": true,
-      "owner": "lana"
-    },
-    {
-      "label": "code",
       "important": false,
-      "done": true,
-      "id": 0.03283672869554488,
+      "done": false,
       "owner": "lana"
     },
     {
@@ -73,6 +66,13 @@
       "done": true,
       "id": 0.43139232468347477,
       "owner": "Lana"
+    },
+    {
+      "label": "Check out Firebase",
+      "important": true,
+      "done": false,
+      "id": 0.13861114490870374,
+      "owner": "lana"
     }
   ]
 }

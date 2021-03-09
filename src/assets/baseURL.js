@@ -1,4 +1,4 @@
 const baseURL = 'http://localhost:3001/';
-//const baseURL = 'https://my-json-server.typicode.com/ssmirnovacode/db.json-todo-app/';
+//const baseURL = 'https://todo-app-ssmirnova.herokuapp.com/';
 
 export default baseURL;

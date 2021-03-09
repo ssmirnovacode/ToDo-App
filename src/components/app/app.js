@@ -25,6 +25,8 @@ const App = () => {
         }
     };
 
+    //==============State hooks====================================================
+
     const [items, setItems] = useState([]);
      
     useEffect( () => {
@@ -42,6 +44,7 @@ const App = () => {
 
     const [loggedIn, setLoggedIn] = useState(false);
 
+    //==============Methods ====================================================
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             reqService.deleteItem(baseURL + 'items/' + id)
@@ -63,7 +66,7 @@ const App = () => {
         .catch(() => console.log('POST error'));
     };
 
-    const toggleStatus = (array, id, statusName) => {
+    const toggleStatus = (array, id, statusName) => { //can be oursourced!!!!!!
             const idx = array.findIndex( el => el.id === id);
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
@@ -98,6 +101,7 @@ const App = () => {
         setLoggedIn(true);
     }
 
+    // ===== Rendering variables ===============
     const visibleItems = items.filter(item => item.owner === user)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
@@ -124,12 +128,14 @@ const App = () => {
                 onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
         </> : <div className="mt-2">Please log in</div>
+
     const userPanel = loggedIn ? 
         <div className="user-panel d-flex">
             <div className="greeting mr-2">Hello, {user}</div> 
             <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>
         </div>
         : <UsernameForm onLogin={handleLogin}/>
+
     return(
         <div className="todo-app">
             {userPanel}
