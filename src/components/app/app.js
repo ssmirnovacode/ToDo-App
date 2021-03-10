@@ -121,8 +121,10 @@ const App = () => {
                                     else return item
                                 });
 
-    const doneCount = visibleItems.filter(el => el.done === true).length;
-    const pendingCount = visibleItems.length - doneCount;
+    const userItems = items.filter(item => item.owner === user);
+
+    const doneCount = userItems.filter(el => el.done === true).length;
+    const pendingCount = userItems.length - doneCount;
 
     // ===== User panel viewed after login ===============
     const userPanel = loggedIn ? 
@@ -156,9 +158,6 @@ const App = () => {
         </>
 
     // ===== Styling ===============
-
-
-
     return(
         <div className={dark ? "todo-app darkmode" : "todo-app"}>
             {userPanel}
@@ -169,8 +168,7 @@ const App = () => {
             </div>
             {list}
         </div>
-    )
-    
+    )    
 }
 
 export default App;
