@@ -10,7 +10,7 @@ import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
 //import firebase from '../../firebase';
 import Firebase from "firebase";
-import config from '../../firebase';
+//import config from '../../firebase';
 
 const App = () => {
 
@@ -29,12 +29,7 @@ const App = () => {
      
     useEffect( () => {
         localStorage.clear();
-        getUserData();
-        /* let mounted = true;
-        reqService.getItems(targetURL)
-        .then( res => {mounted && setItems(res)})
-        .catch(() => console.log('GET error!'));
-        return () => mounted = false; */
+        getTodoItems();
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -47,13 +42,22 @@ const App = () => {
 
     //==============Methods ====================================================
 
-    const getUserData = () => {
+    const getTodoItems = () => {
         let ref = Firebase.database().ref("/items/");
         ref.on("value", snapshot => {
           const myData = snapshot.val();
           setItems(myData);
         });
       };
+
+    const deleteItem = item => { 
+        if (window.confirm('Are you sure you want to delete this item?')) {
+            const newItemsArr = items.filter(data => {
+                return data.id !== item.id;
+            });
+            setItems(newItemsArr);
+        }      
+    };
 
     const createNewItem = (label) => {
         return {
@@ -65,19 +69,7 @@ const App = () => {
         }
     };
 
-    const deleteItem = id => { 
-        if (window.confirm('Are you sure you want to delete this item?')) {
-            reqService.deleteItem(targetURL + id) // add '/' ?
-            .then(() => {
-                console.log(`Item deleted`); 
-                const idx = items.findIndex( el => el.id === id);
-                setItems([
-                    ...items.slice(0, idx),
-                    ...items.slice(idx+1)
-                ])})  //add a message for user
-            .catch(e => console.log('DELETE error!'));
-        }      
-    };
+
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
