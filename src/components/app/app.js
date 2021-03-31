@@ -5,27 +5,36 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-import baseURL from '../../assets/baseURL';
+//import baseURL from '../../assets/baseURL';
 import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
+//import firebase from '../../firebase';
+import Firebase from "firebase";
+import config from '../../firebase';
 
 const App = () => {
 
     const user = localStorage.getItem('user') || '';
 
     const reqService = new RequestService();
-
+    //Firebase.initializeApp(config);
+    
     //==============State hooks====================================================
 
     const [items, setItems] = useState([]);
+
+    //const targetURL = firebase.database().ref('items');
+    const targetURL = "https://todo-app-c1a38-default-rtdb.europe-west1.firebasedatabase.app/items/";
+    //const targetURL = "http://localhost:3001/items";
      
     useEffect( () => {
         localStorage.clear();
-        let mounted = true;
-        reqService.getItems(baseURL + 'items')
+        getUserData();
+        /* let mounted = true;
+        reqService.getItems(targetURL)
         .then( res => {mounted && setItems(res)})
         .catch(() => console.log('GET error!'));
-        return () => mounted = false;
+        return () => mounted = false; */
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -37,6 +46,14 @@ const App = () => {
     const [dark, setDark] = useState(false);
 
     //==============Methods ====================================================
+
+    const getUserData = () => {
+        let ref = Firebase.database().ref("/items/");
+        ref.on("value", snapshot => {
+          const myData = snapshot.val();
+          setItems(myData);
+        });
+      };
 
     const createNewItem = (label) => {
         return {
@@ -50,7 +67,7 @@ const App = () => {
 
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
-            reqService.deleteItem(baseURL + 'items/' + id)
+            reqService.deleteItem(targetURL + id) // add '/' ?
             .then(() => {
                 console.log(`Item deleted`); 
                 const idx = items.findIndex( el => el.id === id);
@@ -64,7 +81,7 @@ const App = () => {
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        reqService.postItem(baseURL + 'items', newItem)
+        reqService.postItem(targetURL, newItem)
         .then(() => setItems([...items, newItem]))
         .catch(() => console.log('POST error'));
     };
@@ -74,7 +91,7 @@ const App = () => {
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
             
-            reqService.updateItem(baseURL + 'items/' + id, updatedItem)
+            reqService.updateItem(targetURL + id, updatedItem)  // add '/' ?
             .then(() => setItems([
                 ...array.slice(0, idx),
                 updatedItem,
