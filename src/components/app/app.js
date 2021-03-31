@@ -10,7 +10,7 @@ import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
 //import firebase from '../../firebase';
 import Firebase from "firebase";
-//import config from '../../firebase';
+import db from '../../firebase';
 
 const App = () => {
 
@@ -24,12 +24,16 @@ const App = () => {
     const [items, setItems] = useState([]);
 
     //const targetURL = firebase.database().ref('items');
-    const targetURL = "https://todo-app-c1a38-default-rtdb.europe-west1.firebasedatabase.app/items/";
+    //const targetURL = "https://todo-app-c1a38-default-rtdb.europe-west1.firebasedatabase.app/items/";
     //const targetURL = "http://localhost:3001/items";
      
     useEffect( () => {
         localStorage.clear();
-        getTodoItems();
+        reqService.getItems()
+        .then(res => res.docs.forEach(item=>{
+            setItems([...items,item.data()])
+           }))
+        //getTodoItems();
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -73,7 +77,7 @@ const App = () => {
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        reqService.postItem(targetURL, newItem)
+        reqService.postItem("http://localhost:3001/items", newItem)
         .then(() => setItems([...items, newItem]))
         .catch(() => console.log('POST error'));
     };
@@ -83,7 +87,7 @@ const App = () => {
             const oldItem = array[idx];
             const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
             
-            reqService.updateItem(targetURL + id, updatedItem)  // add '/' ?
+            reqService.updateItem("http://localhost:3001/items" + id, updatedItem)  // add '/' ?
             .then(() => setItems([
                 ...array.slice(0, idx),
                 updatedItem,
