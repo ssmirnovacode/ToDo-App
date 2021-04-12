@@ -8,8 +8,7 @@ import './app.scss';
 import baseURL from '../../assets/baseURL';
 import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
-import db from '../../firebase.config';
-import firebase from 'firebase';
+import firebase from '../../firebase.config';
 
 const App = () => {
 
@@ -17,42 +16,21 @@ const App = () => {
 
     const reqService = new RequestService();
 
-    var ref = firebase.database().ref();
-
-/* ref.on("value", function(snapshot) {
-   console.log(snapshot.val());
-}, function (error) {
-   console.log("Error: " + error.code);
-}); */
-
     //==============State hooks====================================================
 
     const [items, setItems] = useState([]);
-
-    const fetchItems = async() => {
-        ref.on("value", function(snapshot) {
-            const data = Object.entries(snapshot.val());
-            console.log(data);
-            setItems(data);
-         }, function (error) {
-            console.log("Error: " + error.code);
-         });
-
-        /* const res = db.collection('items');
-        console.log(res);
-        const data=await res.get();
-        console.log(data);
-        return data; */
-    }
      
     useEffect( () => {
         localStorage.clear();
-        reqService.getItems()
-        .then(res => res.docs.forEach(item=> {
-            console.log([...items,item.data()]);
-            setItems([...items,item.data()]);
-           }))
-        .catch(() => console.log('GET error!'));
+        const todoRef = firebase.database().ref('items');
+        todoRef.on('value', (snapshot) => {
+        const todos = snapshot.val();
+        const todoList = [];
+        for (let id in todos) {
+            todoList.push({ id, ...todos[id] });
+        }
+        setItems(todoList);
+        });
         //return () => mounted = false;
     }, []);
 
@@ -78,37 +56,36 @@ const App = () => {
 
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
-            reqService.deleteItem(baseURL + 'items/' + id)
-            .then(() => {
-                console.log(`Item deleted`); 
-                const idx = items.findIndex( el => el.id === id);
-                setItems([
-                    ...items.slice(0, idx),
-                    ...items.slice(idx+1)
-                ])})  //add a message for user
-            .catch(e => console.log('DELETE error!'));
+            const oldItemRef = firebase.database().ref('items').child(id);
+            console.log(oldItemRef);
         }      
     };
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        reqService.postItem(baseURL + 'items', newItem)
-        .then(() => setItems([...items, newItem]))
-        .catch(() => console.log('POST error'));
+        const todoRef = firebase.database().ref('items');
+        todoRef.push(newItem);
     };
 
     const toggleStatus = (array, id, statusName) => { 
-            const idx = array.findIndex( el => el.id === id);
-            const oldItem = array[idx];
-            const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
-            
-            reqService.updateItem(baseURL + 'items/' + id, updatedItem)
+            //const idx = array.findIndex( el => el.id === id);
+            const oldItem = array.find(item => item.id === id);
+            const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]};
+
+            const oldItemRef = firebase.database().ref('items').child(id);
+            oldItemRef.remove();
+
+            const todoRef = firebase.database().ref('items');
+            todoRef.push(updatedItem);
+            //const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; 
+
+            /* reqService.updateItem(baseURL + 'items/' + id, updatedItem)
             .then(() => setItems([
                 ...array.slice(0, idx),
                 updatedItem,
                 ...array.slice(idx+1)
                 ]))
-            .catch(() => console.log('Status update error!'));        
+            .catch(() => console.log('Status update error!'));  */       
     };
 
     const toggleDone = id => {  
