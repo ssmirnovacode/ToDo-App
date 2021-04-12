@@ -49,7 +49,7 @@ const App = () => {
             label,
             important: false,
             done: false,
-            id: Math.random(),
+            //id: Math.random(),
             owner: localStorage.getItem('user')
         }
     };
@@ -57,7 +57,7 @@ const App = () => {
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             const oldItemRef = firebase.database().ref('items').child(id);
-            console.log(oldItemRef);
+            oldItemRef.remove();
         }      
     };
 
