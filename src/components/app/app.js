@@ -9,6 +9,7 @@ import baseURL from '../../assets/baseURL';
 import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
 import db from '../../firebase.config';
+import firebase from 'firebase';
 
 const App = () => {
 
@@ -16,22 +17,41 @@ const App = () => {
 
     const reqService = new RequestService();
 
+    var ref = firebase.database().ref();
+
+/* ref.on("value", function(snapshot) {
+   console.log(snapshot.val());
+}, function (error) {
+   console.log("Error: " + error.code);
+}); */
+
     //==============State hooks====================================================
 
     const [items, setItems] = useState([]);
 
     const fetchItems = async() => {
-        const res = db.collection('items');
+        ref.on("value", function(snapshot) {
+            const data = Object.entries(snapshot.val());
+            console.log(data);
+            setItems(data);
+         }, function (error) {
+            console.log("Error: " + error.code);
+         });
+
+        /* const res = db.collection('items');
+        console.log(res);
         const data=await res.get();
         console.log(data);
+        return data; */
     }
      
     useEffect( () => {
         localStorage.clear();
-        //let mounted = true;
-        fetchItems()
-        .then( res => console.log(res) /* res.docs.forEach( item => {
-            setItems([...items,item.data()] */)
+        reqService.getItems()
+        .then(res => res.docs.forEach(item=> {
+            console.log([...items,item.data()]);
+            setItems([...items,item.data()]);
+           }))
         .catch(() => console.log('GET error!'));
         //return () => mounted = false;
     }, []);
