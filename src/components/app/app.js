@@ -8,6 +8,7 @@ import './app.scss';
 import baseURL from '../../assets/baseURL';
 import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
+import db from '../../firebase.config';
 
 const App = () => {
 
@@ -18,14 +19,21 @@ const App = () => {
     //==============State hooks====================================================
 
     const [items, setItems] = useState([]);
+
+    const fetchItems = async() => {
+        const res = db.collection('items');
+        const data=await res.get();
+        console.log(data);
+    }
      
     useEffect( () => {
         localStorage.clear();
-        let mounted = true;
-        reqService.getItems(baseURL + 'items')
-        .then( res => {mounted && setItems(res)})
+        //let mounted = true;
+        fetchItems()
+        .then( res => console.log(res) /* res.docs.forEach( item => {
+            setItems([...items,item.data()] */)
         .catch(() => console.log('GET error!'));
-        return () => mounted = false;
+        //return () => mounted = false;
     }, []);
 
     const [pattern, setPattern] = useState('');
