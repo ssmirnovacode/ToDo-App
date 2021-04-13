@@ -1,19 +1,20 @@
 # ToDo App
 
-ToDo app allowing you to:
+A CRUD Todo app implemented with Firebase allowing you to:
  - log in with your name (usernames are case sensitive) to access your personal ToDo List, no password required
  - add new ToDo items
  - search through the existing items
  - filter items by status (done/pending/all)
 
 You can check out the app here: https://ssmirnovacode.github.io/ToDo-App/
+
 WARNING! Your data (name and todo items) will NOT be private and will be accessible in a public repo. This is just a prototype of an app, only for demo purposes.
 
 ## Technologies used
  - SCSS
- - JavaScript
  - React
  - React Hooks
- - json-server fake API 
- - localStorage (for usernames authentification)
+ - Firebase Realtime Database
+ - Node.js
+ 
 
