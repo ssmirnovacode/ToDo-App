@@ -9,7 +9,7 @@ const TodoList = ({items, onDelete, onToggleDone, onToggleImportant, darkmode}) 
             {
                 items.map(item => {
 
-                    const {id, ...itemProps} = item;
+                    const {id,...itemProps} = item;
                     return(
                         <li className={darkmode ? "list-group-item darkmode" : "list-group-item"} key={id}>
                             <TodoListItem {...itemProps} onDelete={() => onDelete(id)}

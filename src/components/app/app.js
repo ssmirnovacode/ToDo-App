@@ -5,15 +5,12 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-import baseURL from '../../assets/baseURL';
-import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
+import firebase from '../../firebase.config';
 
 const App = () => {
 
     const user = localStorage.getItem('user') || '';
-
-    const reqService = new RequestService();
 
     //==============State hooks====================================================
 
@@ -21,11 +18,15 @@ const App = () => {
      
     useEffect( () => {
         localStorage.clear();
-        let mounted = true;
-        reqService.getItems(baseURL + 'items')
-        .then( res => {mounted && setItems(res)})
-        .catch(() => console.log('GET error!'));
-        return () => mounted = false;
+        const todoRef = firebase.database().ref('items');
+        todoRef.on('value', (snapshot) => {
+        const todos = snapshot.val();
+        const todoList = [];
+        for (let id in todos) {
+            todoList.push({ id, ...todos[id] });
+        }
+        setItems(todoList);
+        }, (err) => {throw new Error(err)});
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -43,44 +44,41 @@ const App = () => {
             label,
             important: false,
             done: false,
-            id: Math.random(),
             owner: localStorage.getItem('user')
         }
     };
 
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
-            reqService.deleteItem(baseURL + 'items/' + id)
-            .then(() => {
-                console.log(`Item deleted`); 
-                const idx = items.findIndex( el => el.id === id);
-                setItems([
-                    ...items.slice(0, idx),
-                    ...items.slice(idx+1)
-                ])})  //add a message for user
-            .catch(e => console.log('DELETE error!'));
+            const oldItemRef = firebase.database().ref('items/'+id);
+            oldItemRef.remove()
+            .then(() => console.log("Remove succeeded."))
+              .catch((err) => {
+                  //throw new Error(err);
+                console.log("Remove failed: " + err.message);
+            });
         }      
     };
 
     const addItem = (label) => { 
         const newItem = createNewItem(label);
-        reqService.postItem(baseURL + 'items', newItem)
-        .then(() => setItems([...items, newItem]))
-        .catch(() => console.log('POST error'));
+        const todoRef = firebase.database().ref('items');
+        todoRef.push(newItem);
     };
 
     const toggleStatus = (array, id, statusName) => { 
-            const idx = array.findIndex( el => el.id === id);
-            const oldItem = array[idx];
-            const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; // superficial copy of oldItem and updated property
-            
-            reqService.updateItem(baseURL + 'items/' + id, updatedItem)
-            .then(() => setItems([
-                ...array.slice(0, idx),
-                updatedItem,
-                ...array.slice(idx+1)
-                ]))
-            .catch(() => console.log('Status update error!'));        
+            const oldItem = array.find(item => item.id === id);
+
+            const itemRef = firebase.database().ref('items/' + id);
+            itemRef.update({
+                [statusName]: !oldItem[statusName]
+            }, (error) => {
+                if (error) {
+                  throw new Error(error);
+                } else {
+                  console.log('Data updated successfully');
+                }
+              });      
     };
 
     const toggleDone = id => {  
