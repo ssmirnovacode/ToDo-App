@@ -5,16 +5,12 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-import baseURL from '../../assets/baseURL';
-import RequestService from '../../services/requests';
 import UsernameForm from '../username/username';
 import firebase from '../../firebase.config';
 
 const App = () => {
 
     const user = localStorage.getItem('user') || '';
-
-    const reqService = new RequestService();
 
     //==============State hooks====================================================
 
@@ -31,7 +27,6 @@ const App = () => {
         }
         setItems(todoList);
         });
-        //return () => mounted = false;
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -49,14 +44,13 @@ const App = () => {
             label,
             important: false,
             done: false,
-            //id: Math.random(),
             owner: localStorage.getItem('user')
         }
     };
 
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
-            const oldItemRef = firebase.database().ref('items').child(id);
+            const oldItemRef = firebase.database().ref('items/'+id);
             oldItemRef.remove();
         }      
     };
@@ -68,24 +62,12 @@ const App = () => {
     };
 
     const toggleStatus = (array, id, statusName) => { 
-            //const idx = array.findIndex( el => el.id === id);
             const oldItem = array.find(item => item.id === id);
-            const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]};
 
-            const oldItemRef = firebase.database().ref('items').child(id);
-            oldItemRef.remove();
-
-            const todoRef = firebase.database().ref('items');
-            todoRef.push(updatedItem);
-            //const updatedItem = {...oldItem, [statusName]: !oldItem[statusName]}; 
-
-            /* reqService.updateItem(baseURL + 'items/' + id, updatedItem)
-            .then(() => setItems([
-                ...array.slice(0, idx),
-                updatedItem,
-                ...array.slice(idx+1)
-                ]))
-            .catch(() => console.log('Status update error!'));  */       
+            const itemRef = firebase.database().ref('items/' + id);
+            itemRef.update({
+                [statusName]: !oldItem[statusName]
+            })      
     };
 
     const toggleDone = id => {  
