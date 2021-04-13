@@ -26,7 +26,7 @@ const App = () => {
             todoList.push({ id, ...todos[id] });
         }
         setItems(todoList);
-        });
+        }, (err) => {throw new Error(err)});
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -51,7 +51,12 @@ const App = () => {
     const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             const oldItemRef = firebase.database().ref('items/'+id);
-            oldItemRef.remove();
+            oldItemRef.remove()
+            .then(() => console.log("Remove succeeded."))
+              .catch((err) => {
+                  //throw new Error(err);
+                console.log("Remove failed: " + err.message);
+            });
         }      
     };
 
@@ -67,7 +72,13 @@ const App = () => {
             const itemRef = firebase.database().ref('items/' + id);
             itemRef.update({
                 [statusName]: !oldItem[statusName]
-            })      
+            }, (error) => {
+                if (error) {
+                  throw new Error(error);
+                } else {
+                  console.log('Data updated successfully');
+                }
+              });      
     };
 
     const toggleDone = id => {  
