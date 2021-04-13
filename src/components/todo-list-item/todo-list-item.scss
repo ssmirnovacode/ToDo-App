@@ -1,3 +1,13 @@
+
+[data-todoitem] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.todo-btn-group {
+  display: flex;
+  flex-wrap: nowrap;
+}
 .todo-list-item {
     font-size: 1.25rem;
 
@@ -16,7 +26,7 @@
     }
     &.important .todo-list-item-label {
       font-weight: bold;
-      color: #d1332e;
+      color: #dc3545;
     }
     &.darkmode{
       background-color: black;
@@ -24,6 +34,18 @@
     }
   }
   
-.active {
-  background-color: danger;
-}
+  .btn.btn-outline-danger {
+    &.active {
+      background-color: danger;
+    }
+    &:hover {
+      background-color: white;
+      color: #dc3545;
+      &.darkmode{
+        background-color: black;
+      }
+    }
+  }
+/* .btn-outline-danger:focus, .btn-outline-danger:disabled {
+  box-shadow: none;
+} */
