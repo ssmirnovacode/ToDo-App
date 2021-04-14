@@ -1,0 +1,26 @@
+
+.footer {
+    padding: .45rem .75rem;
+    margin-top: 2rem;
+    font-size: 20px; 
+    &_social {      
+        
+        &_icons {
+            font-size: 2rem;
+            color: black;
+        }
+    }
+    &.darkmode{
+        background-color: black;
+        color: white;
+            & .sm-icon {
+                color: white;
+            }
+
+      }
+}
+
+.sm-icon {
+    margin-right: 1rem;
+    color: rgb(33, 37, 41);
+}

@@ -7,6 +7,7 @@ import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import UsernameForm from '../username/username';
 import firebase from '../../firebase.config';
+import Footer from '../footer/footer';
 
 const App = () => {
 
@@ -165,6 +166,7 @@ const App = () => {
                     value={dark} onChange={toggleDark}/>
             </div>
             {list}
+            <Footer darkmode={dark} />
         </div>
     )    
 }
