@@ -73,13 +73,27 @@
     }  
   }
 
-  /* .btn.btn-outline-danger:hover {
-    @media (hover: hover) and (pointer:fine) {
-      background-color: white;
-      color: #dc3545;
-      &.darkmode{
-        background-color: black;
-        color: #dc3545;
+  @media (hover: none) {
+    .btn.btn-outline-danger {
+      &:hover {
+        background-color: inherit;
+        color: #dc3545;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: black;
+          color: #dc3545;
+          cursor:pointer;
+        }
       }
-    }
-  } */
+      &.active:hover {
+        background-color: #dc3545;
+        color: white;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: #dc3545;
+          color: white;
+          cursor:pointer;
+        }
+      }
+    }  
+  }
