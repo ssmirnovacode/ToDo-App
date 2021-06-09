@@ -49,6 +49,12 @@ const App = () => {
         }
     };
 
+    const addItem = async (label) => { 
+        const newItem = createNewItem(label);
+        await db.collection('items').doc(newItem.id).set(newItem);
+        setItems(items => ([...items, newItem]));
+    };
+
     const deleteItem = async id => { // pending method
         if (window.confirm('Are you sure you want to delete this item?')) {
             await db.doc(`items/${id}`).delete();
@@ -58,34 +64,34 @@ const App = () => {
         }      
     };
 
-    const addItem = async (label) => { 
-        const newItem = createNewItem(label);
-        await db.collection('items').doc(newItem.id).set(newItem);
-        setItems(items => ([...items, newItem]));
+    const toggleStatus = async (array, id, statusName) => { 
+            const oldItem = array.find(item => item.id === id);
+            
+            await db.doc(`items/${id}`).update({
+                [statusName]: !oldItem[statusName]
+            }, error => {
+                  throw new Error(error);
+                }
+            );
+            const idX = array.findIndex(item => item.id === id);
+            const newItem = {
+                ...items[idX],
+                [statusName]: !oldItem[statusName]
+            };
+           //console.log(newItem);
+            const newArray = [...items.slice(0, idX), newItem, ...items.slice(idX + 1)];
+            setItems(newArray);    
     };
 
-    /* const toggleStatus = (array, id, statusName) => { 
-            const oldItem = array.find(item => item.id === id);
+    
 
-            const itemRef = firebase.database().ref('items/' + id);
-            itemRef.update({
-                [statusName]: !oldItem[statusName]
-            }, (error) => {
-                if (error) {
-                  throw new Error(error);
-                } else {
-                  console.log('Data updated successfully');
-                }
-              });      
-    }; */
-
-   /*  const toggleDone = id => {  
+    const toggleDone = id => {  
         toggleStatus(items, id, 'done');
     };
 
     const toggleImportant = id => { 
         toggleStatus(items, id, 'important');
-    }; */
+    };
 
     const searchItems = (value) => { 
         setPattern(value);
@@ -142,7 +148,7 @@ const App = () => {
                 <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
             </div>
             <TodoList darkmode={dark} items={visibleItems} onDelete={ deleteItem} 
-                /* onToggleDone={toggleDone} onToggleImportant={toggleImportant} *//>
+                onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
         </> 
         : 
