@@ -19,10 +19,11 @@ const App = () => {
     const [items, setItems] = useState([]);
      
     useEffect( () => {
-        localStorage.clear();
+        //localStorage.clear();
         db.collection('items').get().then(snapshot => {
-            const items = firebaseLooper(snapshot);
-            setItems(items);
+            const todos = firebaseLooper(snapshot);
+            setItems(todos);
+            console.log('useEffect ran');
         })
         .catch( err => console.error(err.message));
 
@@ -44,27 +45,25 @@ const App = () => {
             important: false,
             done: false,
             owner: localStorage.getItem('user'),
-            id: parseInt(Math.random()*1000000000)
+            id: Math.random()*100000000
         }
     };
 
-    /* const deleteItem = id => { 
+    const deleteItem = id => { // pending method
         if (window.confirm('Are you sure you want to delete this item?')) {
-            const oldItemRef = firebase.database().ref('items/'+id);
-            oldItemRef.remove()
-            .then(() => console.log("Remove succeeded."))
-              .catch((err) => {
-                  
-                console.log("Remove failed: " + err.message);
-            });
+            const itemToBeDeleted = db.doc(`items/${id}`);
+            itemToBeDeleted.get().then( snapshot => {
+                console.log(snapshot.data());
+            })
+            .catch(err => console.error(err.message));
         }      
-    }; */
+    };
 
-    /* const addItem = (label) => { 
+    const addItem = async (label) => { 
         const newItem = createNewItem(label);
-        const todoRef = firebase.database().ref('items');
-        todoRef.push(newItem);
-    }; */
+        await db.collection('items').doc().set(newItem);
+        setItems(items => ([...items, newItem]));
+    };
 
     /* const toggleStatus = (array, id, statusName) => { 
             const oldItem = array.find(item => item.id === id);
@@ -107,7 +106,7 @@ const App = () => {
     };
 
     // ===== Rendering variables ===============
-    const visibleItems = items.filter(item => item.owner === user)
+    const visibleItems = items && items.filter(item => item.owner === user)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
                                     if (filter === 'done') {
@@ -143,9 +142,9 @@ const App = () => {
                 <SearchPanel value={pattern} onSearch={searchItems}/>
                 <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
             </div>
-            <TodoList darkmode={dark} items={visibleItems} /* onDelete={ deleteItem} 
-                onToggleDone={toggleDone} onToggleImportant={toggleImportant} *//>
-            <ItemAddForm /* onAdd={addItem} *//> 
+            <TodoList darkmode={dark} items={visibleItems} onDelete={ deleteItem} 
+                /* onToggleDone={toggleDone} onToggleImportant={toggleImportant} *//>
+            <ItemAddForm onAdd={addItem}/> 
         </> 
         : 
         <>
