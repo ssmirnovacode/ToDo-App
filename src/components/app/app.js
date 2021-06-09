@@ -6,7 +6,7 @@ import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import UsernameForm from '../username/username';
-import firebase from '../../firebase.config';
+import { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 
 const App = () => {
@@ -19,7 +19,11 @@ const App = () => {
      
     useEffect( () => {
         localStorage.clear();
-        const todoRef = firebase.database().ref('items');
+        db.collection('items').get().then(snapshot => {
+            snapshot.forEach( doc => console.log(doc.data()));
+        })
+        .catch( err => console.log(err.message));
+        /* const todoRef = firebase.database().ref('items');
         todoRef.on('value', (snapshot) => {
         const todos = snapshot.val();
         const todoList = [];
@@ -27,7 +31,7 @@ const App = () => {
             todoList.push({ id, ...todos[id] });
         }
         setItems(todoList);
-        }, (err) => {throw new Error(err)});
+        }, (err) => {throw new Error(err)}); */
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -49,25 +53,25 @@ const App = () => {
         }
     };
 
-    const deleteItem = id => { 
+    /* const deleteItem = id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             const oldItemRef = firebase.database().ref('items/'+id);
             oldItemRef.remove()
             .then(() => console.log("Remove succeeded."))
               .catch((err) => {
-                  //throw new Error(err);
+                  
                 console.log("Remove failed: " + err.message);
             });
         }      
-    };
+    }; */
 
-    const addItem = (label) => { 
+    /* const addItem = (label) => { 
         const newItem = createNewItem(label);
         const todoRef = firebase.database().ref('items');
         todoRef.push(newItem);
-    };
+    }; */
 
-    const toggleStatus = (array, id, statusName) => { 
+    /* const toggleStatus = (array, id, statusName) => { 
             const oldItem = array.find(item => item.id === id);
 
             const itemRef = firebase.database().ref('items/' + id);
@@ -80,15 +84,15 @@ const App = () => {
                   console.log('Data updated successfully');
                 }
               });      
-    };
+    }; */
 
-    const toggleDone = id => {  
+   /*  const toggleDone = id => {  
         toggleStatus(items, id, 'done');
     };
 
     const toggleImportant = id => { 
         toggleStatus(items, id, 'important');
-    };
+    }; */
 
     const searchItems = (value) => { 
         setPattern(value);
@@ -144,9 +148,9 @@ const App = () => {
                 <SearchPanel value={pattern} onSearch={searchItems}/>
                 <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
             </div>
-            <TodoList darkmode={dark} items={visibleItems} onDelete={deleteItem} 
-                onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
-            <ItemAddForm onAdd={addItem}/> 
+            <TodoList darkmode={dark} items={visibleItems} /* onDelete={ deleteItem} 
+                onToggleDone={toggleDone} onToggleImportant={toggleImportant} *//>
+            <ItemAddForm /* onAdd={addItem} *//> 
         </> 
         : 
         <>
