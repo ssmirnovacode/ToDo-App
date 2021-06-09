@@ -6,8 +6,9 @@ import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import UsernameForm from '../username/username';
-import firebase from '../../firebase.config';
+import { db } from '../../firebase.config';
 import Footer from '../footer/footer';
+import { firebaseLooper } from '../../utils/tools';
 
 const App = () => {
 
@@ -17,26 +18,24 @@ const App = () => {
 
     const [items, setItems] = useState([]);
      
-    useEffect( () => {
-        localStorage.clear();
-        const todoRef = firebase.database().ref('items');
-        todoRef.on('value', (snapshot) => {
-        const todos = snapshot.val();
-        const todoList = [];
-        for (let id in todos) {
-            todoList.push({ id, ...todos[id] });
-        }
-        setItems(todoList);
-        }, (err) => {throw new Error(err)});
-    }, []);
-
-    const [pattern, setPattern] = useState('');
+    const [pattern, setPattern] = useState(''); //search query
 
     const [filter, setFilter] = useState('all');
 
     const [loggedIn, setLoggedIn] = useState(false);
 
     const [dark, setDark] = useState(false);
+
+    useEffect( () => {
+        //localStorage.clear();
+        db.collection('items').get().then(snapshot => {
+            const todos = firebaseLooper(snapshot);
+            setItems(todos);
+            console.log('useEffect ran');
+        })
+        .catch( err => console.error(err.message));
+
+    }, []);
 
     //==============Methods ====================================================
 
@@ -45,41 +44,42 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: localStorage.getItem('user')
+            owner: localStorage.getItem('user'),
+            id: (Math.random()*100000000).toString()
         }
     };
 
-    const deleteItem = id => { 
+    const addItem = async (label) => { 
+        const newItem = createNewItem(label);
+        await db.collection('items').doc(newItem.id).set(newItem);
+        setItems(items => ([...items, newItem]));
+    };
+
+    const deleteItem = async id => { // pending method
         if (window.confirm('Are you sure you want to delete this item?')) {
-            const oldItemRef = firebase.database().ref('items/'+id);
-            oldItemRef.remove()
-            .then(() => console.log("Remove succeeded."))
-              .catch((err) => {
-                  //throw new Error(err);
-                console.log("Remove failed: " + err.message);
-            });
+            await db.doc(`items/${id}`).delete();
+            const idX = items.findIndex(item => item.id === id);
+            const newArray = [...items.slice(0,idX), ...items.slice(idX + 1)];
+            setItems(newArray);
         }      
     };
 
-    const addItem = (label) => { 
-        const newItem = createNewItem(label);
-        const todoRef = firebase.database().ref('items');
-        todoRef.push(newItem);
-    };
-
-    const toggleStatus = (array, id, statusName) => { 
+    const toggleStatus = async (array, id, statusName) => { 
             const oldItem = array.find(item => item.id === id);
-
-            const itemRef = firebase.database().ref('items/' + id);
-            itemRef.update({
+            
+            await db.doc(`items/${id}`).update({
                 [statusName]: !oldItem[statusName]
-            }, (error) => {
-                if (error) {
-                  throw new Error(error);
-                } else {
-                  console.log('Data updated successfully');
-                }
-              });      
+                }, error => {
+                    throw new Error(error);
+                    }
+                );
+            const idX = array.findIndex(item => item.id === id);
+            const newItem = {
+                ...items[idX],
+                [statusName]: !oldItem[statusName]
+            };
+            const newArray = [...items.slice(0, idX), newItem, ...items.slice(idX + 1)];
+            setItems(newArray);    
     };
 
     const toggleDone = id => {  
@@ -107,8 +107,8 @@ const App = () => {
         dark ? setDark(false) : setDark(true);
     };
 
-    // ===== Rendering variables ===============
-    const visibleItems = items.filter(item => item.owner === user)
+    // ===== Rendering options ===============
+    const visibleItems = items && items.filter(item => item.owner === user)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
                                     if (filter === 'done') {
@@ -121,7 +121,6 @@ const App = () => {
                                 });
 
     const userItems = items.filter(item => item.owner === user);
-
     const doneCount = userItems.filter(el => el.done === true).length;
     const pendingCount = userItems.length - doneCount;
 
@@ -144,14 +143,14 @@ const App = () => {
                 <SearchPanel value={pattern} onSearch={searchItems}/>
                 <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
             </div>
-            <TodoList darkmode={dark} items={visibleItems} onDelete={deleteItem} 
+            <TodoList darkmode={dark} items={visibleItems} onDelete={ deleteItem} 
                 onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
             <ItemAddForm onAdd={addItem}/> 
         </> 
         : 
         <>
             <h1>ToDo List</h1>
-                <UsernameForm onLogin={handleLogin}/>
+            <UsernameForm onLogin={handleLogin}/>
             <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
                 <br/><span>Please note that our todo items will be available to anyone who logs in with your username</span></div>
         </>
