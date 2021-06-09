@@ -45,7 +45,7 @@ const App = () => {
             important: false,
             done: false,
             owner: localStorage.getItem('user'),
-            id: Math.random()*100000000
+            id: (Math.random()*100000000).toString()
         }
     };
 
@@ -61,7 +61,7 @@ const App = () => {
 
     const addItem = async (label) => { 
         const newItem = createNewItem(label);
-        await db.collection('items').doc().set(newItem);
+        await db.collection('items').doc(newItem.id).set(newItem);
         setItems(items => ([...items, newItem]));
     };
 
