@@ -49,13 +49,12 @@ const App = () => {
         }
     };
 
-    const deleteItem = id => { // pending method
+    const deleteItem = async id => { // pending method
         if (window.confirm('Are you sure you want to delete this item?')) {
-            const itemToBeDeleted = db.doc(`items/${id}`);
-            itemToBeDeleted.get().then( snapshot => {
-                console.log(snapshot.data());
-            })
-            .catch(err => console.error(err.message));
+            await db.doc(`items/${id}`).delete();
+            const idX = items.findIndex(item => item.id === id);
+            const newArray = [...items.slice(0,idX), ...items.slice(idX + 1)];
+            setItems(newArray);
         }      
     };
 
