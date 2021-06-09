@@ -18,6 +18,14 @@ const App = () => {
 
     const [items, setItems] = useState([]);
      
+    const [pattern, setPattern] = useState(''); //search query
+
+    const [filter, setFilter] = useState('all');
+
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const [dark, setDark] = useState(false);
+
     useEffect( () => {
         //localStorage.clear();
         db.collection('items').get().then(snapshot => {
@@ -28,14 +36,6 @@ const App = () => {
         .catch( err => console.error(err.message));
 
     }, []);
-
-    const [pattern, setPattern] = useState('');
-
-    const [filter, setFilter] = useState('all');
-
-    const [loggedIn, setLoggedIn] = useState(false);
-
-    const [dark, setDark] = useState(false);
 
     //==============Methods ====================================================
 
@@ -69,21 +69,18 @@ const App = () => {
             
             await db.doc(`items/${id}`).update({
                 [statusName]: !oldItem[statusName]
-            }, error => {
-                  throw new Error(error);
-                }
-            );
+                }, error => {
+                    throw new Error(error);
+                    }
+                );
             const idX = array.findIndex(item => item.id === id);
             const newItem = {
                 ...items[idX],
                 [statusName]: !oldItem[statusName]
             };
-           //console.log(newItem);
             const newArray = [...items.slice(0, idX), newItem, ...items.slice(idX + 1)];
             setItems(newArray);    
     };
-
-    
 
     const toggleDone = id => {  
         toggleStatus(items, id, 'done');
@@ -110,7 +107,7 @@ const App = () => {
         dark ? setDark(false) : setDark(true);
     };
 
-    // ===== Rendering variables ===============
+    // ===== Rendering options ===============
     const visibleItems = items && items.filter(item => item.owner === user)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
@@ -124,7 +121,6 @@ const App = () => {
                                 });
 
     const userItems = items.filter(item => item.owner === user);
-
     const doneCount = userItems.filter(el => el.done === true).length;
     const pendingCount = userItems.length - doneCount;
 
@@ -154,7 +150,7 @@ const App = () => {
         : 
         <>
             <h1>ToDo List</h1>
-                <UsernameForm onLogin={handleLogin}/>
+            <UsernameForm onLogin={handleLogin}/>
             <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
                 <br/><span>Please note that our todo items will be available to anyone who logs in with your username</span></div>
         </>
