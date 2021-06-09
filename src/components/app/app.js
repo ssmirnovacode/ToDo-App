@@ -8,6 +8,7 @@ import './app.scss';
 import UsernameForm from '../username/username';
 import { db } from '../../firebase.config';
 import Footer from '../footer/footer';
+import { firebaseLooper } from '../../utils/tools';
 
 const App = () => {
 
@@ -20,18 +21,11 @@ const App = () => {
     useEffect( () => {
         localStorage.clear();
         db.collection('items').get().then(snapshot => {
-            snapshot.forEach( doc => console.log(doc.data()));
+            const items = firebaseLooper(snapshot);
+            setItems(items);
         })
-        .catch( err => console.log(err.message));
-        /* const todoRef = firebase.database().ref('items');
-        todoRef.on('value', (snapshot) => {
-        const todos = snapshot.val();
-        const todoList = [];
-        for (let id in todos) {
-            todoList.push({ id, ...todos[id] });
-        }
-        setItems(todoList);
-        }, (err) => {throw new Error(err)}); */
+        .catch( err => console.error(err.message));
+
     }, []);
 
     const [pattern, setPattern] = useState('');
@@ -49,7 +43,8 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: localStorage.getItem('user')
+            owner: localStorage.getItem('user'),
+            id: parseInt(Math.random()*1000000000)
         }
     };
 
