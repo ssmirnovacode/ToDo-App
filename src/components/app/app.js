@@ -31,7 +31,7 @@ const App = () => {
         db.collection('items').get().then(snapshot => {
             const todos = firebaseLooper(snapshot);
             setItems(todos);
-            console.log('useEffect ran');
+            //console.log('useEffect ran');
         })
         .catch( err => console.error(err.message));
 
