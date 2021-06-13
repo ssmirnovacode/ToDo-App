@@ -152,7 +152,7 @@ const App = () => {
             <h1>ToDo List</h1>
             <UsernameForm onLogin={handleLogin}/>
             <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
-                <br/><span>Please note that our todo items will be available to anyone who logs in with your username</span></div>
+                <br/><span>Please note that your todo items will be available to anyone who logs in with your username</span></div>
         </>
 
     // ===== Styling ===============

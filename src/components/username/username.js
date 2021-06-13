@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import './username.scss';
 
 const UsernameForm = (props) => {
 
