@@ -151,43 +151,11 @@ const App = () => {
     const doneCount = userItems.filter(el => el.done === true).length;
     const pendingCount = userItems.length - doneCount;
 
-    // ===== Todo list view based on if logged in or not ===============
-    /* const content = loggedIn ? 
-        <>
-            <AppHeader toDo={pendingCount} done={doneCount} />
-            <div className="top-panel d-flex">
-                <SearchPanel value={pattern} onSearch={searchItems}/>
-                <ItemStatusFilter filter={filter} onSwitch={onSwitchFilter}/>
-            </div>
-            <TodoList darkmode={dark} items={visibleItems} onDelete={ deleteItem} 
-                onToggleDone={toggleDone} onToggleImportant={toggleImportant}/>
-            <ItemAddForm onAdd={addItem}/> 
-        </> 
-        : 
-        <>
-            <h1>ToDo List</h1>
-            {
-                signInType === 'login' ? 
-                <>
-                <LoginForm />
-                <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
-                    onClick={() => setSignInType('register')}>here</span></div>
-                <div className="descr mt-2">You can also sign-in as a <span className="login-span"
-                    onClick={guestUserSignIn}>guest</span><br/>
-                    If you choose to sign in as a guest, your data will be public!</div>
-                </>
-                : 
-                <>
-                <RegisterForm onRegister={() => setSignInType('login')} />
-                <div className="descr mt-2">Already registered? Please  <span className="login-span" 
-                    onClick={() => setSignInType('login')}>log in</span></div>
-                    <div className="descr mt-2">For demo purposes email verification has been disabled.<br/> 
-                    You can register with an imaginary email (for example, test@test.com)</div>
-                </>
-            } 
-        </> */
+    const contentProps = {
+        loggedIn, pendingCount, doneCount, pattern, searchItems, filter, onSwitchFilter, dark, visibleItems, 
+        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn
+    }
 
-    // ===== Styling and composing ===============
     return(
         <div className={dark ? "todo-app darkmode" : "todo-app"}>
             {loggedIn && <UserPanel name={user.displayName} handleLogOut={handleLogOut} /> }
@@ -196,11 +164,7 @@ const App = () => {
                 <input type="checkbox" className="custom-control-input" id="customSwitch1" 
                     value={dark} onChange={toggleDark}/>
             </div>
-            {/* {content} */}
-            <Content loggedIn={loggedIn} pendingCount={pendingCount} doneCount={doneCount} pattern={pattern} searchItems={searchItems} 
-                filter={filter} onSwitchFilter={onSwitchFilter} dark={dark} visibleItems={visibleItems} 
-                deleteItem={deleteItem} toggleDone={toggleDone} toggleImportant={toggleImportant}
-                 addItem={addItem} signInType={signInType} setSignInType={setSignInType} guestUserSignIn={guestUserSignIn} />
+            <Content {...contentProps} />
             <Footer darkmode={dark} />
         </div>
     )    
