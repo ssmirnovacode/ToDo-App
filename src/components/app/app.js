@@ -9,6 +9,7 @@ import UsernameForm from '../username/username';
 import { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
+import RegisterForm from '../register/register';
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const [dark, setDark] = useState(false);
+
 
     useEffect( () => {
         //localStorage.clear();
@@ -98,8 +100,8 @@ const App = () => {
         setFilter(filterName);
     }
 
-    const handleLogin = (username) => {
-        localStorage.setItem('user', username);
+    const handleLogin = (username) => { // change it to the auth code with Firebase
+        //localStorage.setItem('user', username);
         setLoggedIn(true);
     }
 
@@ -150,7 +152,8 @@ const App = () => {
         : 
         <>
             <h1>ToDo List</h1>
-            <UsernameForm onLogin={handleLogin}/>
+            <RegisterForm />
+            {/* <UsernameForm onLogin={handleLogin}/> */}
             <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
                 <br/><span>Please note that your todo items will be available to anyone who logs in with your username</span></div>
         </>
