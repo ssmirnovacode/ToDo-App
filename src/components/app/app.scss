@@ -27,9 +27,12 @@
   color: inverse;
 }
 
-.descr>span {
-  font-size: 0.8rem;
-  color: tomato;
+.descr .login-span {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #17a2b8;
+  font-size: 1.1rem;
 }
 
 .dark-toggle {

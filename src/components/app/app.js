@@ -5,14 +5,15 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-import UsernameForm from '../username/username';
-import { db } from '../../firebase.config';
+import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
+import RegisterForm from '../register/register';
+import LoginForm from '../login/login';
 
 const App = () => {
 
-    const user = localStorage.getItem('user') || '';
+    let user = firebase.auth().currentUser || null;
 
     //==============State hooks====================================================
 
@@ -26,8 +27,22 @@ const App = () => {
 
     const [dark, setDark] = useState(false);
 
+    const [signInType, setSignInType] = useState('login');
+
+    firebase.auth().onAuthStateChanged( userObj => {
+        if (userObj && signInType === 'login') {
+            user = firebase.auth().currentUser;
+            setLoggedIn(true);
+            //console.log(`${user.displayName} logged in`);
+        }
+        else {
+            setLoggedIn(false);
+            //console.log('No authorized users online');
+        }
+    })
+
     useEffect( () => {
-        //localStorage.clear();
+
         db.collection('items').get().then(snapshot => {
             const todos = firebaseLooper(snapshot);
             setItems(todos);
@@ -44,7 +59,7 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: localStorage.getItem('user'),
+            owner: user.uid,
             id: (Math.random()*100000000).toString()
         }
     };
@@ -55,7 +70,7 @@ const App = () => {
         setItems(items => ([...items, newItem]));
     };
 
-    const deleteItem = async id => { // pending method
+    const deleteItem = async id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             await db.doc(`items/${id}`).delete();
             const idX = items.findIndex(item => item.id === id);
@@ -98,9 +113,8 @@ const App = () => {
         setFilter(filterName);
     }
 
-    const handleLogin = (username) => {
-        localStorage.setItem('user', username);
-        setLoggedIn(true);
+    const handleLogOut = async () => {
+        await firebase.auth().signOut();
     }
 
     const toggleDark = () => {
@@ -108,7 +122,7 @@ const App = () => {
     };
 
     // ===== Rendering options ===============
-    const visibleItems = items && items.filter(item => item.owner === user)
+    const visibleItems = items && items.filter(item => user && item.owner === user.uid)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
                                     if (filter === 'done') {
@@ -128,8 +142,8 @@ const App = () => {
     const userPanel = loggedIn ? 
          <>
             <div className="user-panel d-flex">
-                <div className="greeting mr-2">Hello, {user}</div> 
-                <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>            
+                <div className="greeting mr-2">Hello, {user && user.displayName}</div> 
+                <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
             </div>
             
         </>
@@ -150,9 +164,22 @@ const App = () => {
         : 
         <>
             <h1>ToDo List</h1>
-            <UsernameForm onLogin={handleLogin}/>
-            <div className="descr mt-2">Please log in. No password required.<br/>To create a new user just type your username. 
-                <br/><span>Please note that your todo items will be available to anyone who logs in with your username</span></div>
+            {
+                signInType === 'login' ? 
+                <>
+                <LoginForm />
+                <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
+                    onClick={() => setSignInType('register')}>here</span></div>
+                </>
+                : 
+                <>
+                <RegisterForm onRegister={() => setSignInType('login')} />
+                <div className="descr mt-2">Already registered? Please  <span className="login-span" 
+                    onClick={() => setSignInType('login')}>log in</span></div>
+                    <div className="descr mt-2">For demo purposes email verification has been disabled.<br/> 
+                    You can register with an imaginary email (por example, test@test.com)</div>
+                </>
+            } 
         </>
 
     // ===== Styling ===============
