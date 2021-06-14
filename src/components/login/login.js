@@ -11,7 +11,7 @@ const initialLoginState = {
 };
 
 const LoginForm = (props) => {
-    //localStorage.clear();
+    localStorage.clear();
     const [loginState, setLoginState] = useState(initialLoginState);
     const onLabelChange = (e) => {
         setLoginState(loginState => ({

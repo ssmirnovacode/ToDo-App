@@ -11,7 +11,10 @@ const initialRegState = {
 
 const handleRegister = (data) => {
     firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
-    .then(res => console.log(res))
+    .then(() => firebase.auth().currentUser.updateProfile({
+        displayName: data.username,
+        photoURL: null
+    }))
     .catch (err => console.error(err.message))
 
 }

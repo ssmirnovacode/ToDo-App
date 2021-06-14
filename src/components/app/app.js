@@ -33,6 +33,7 @@ const App = () => {
     firebase.auth().onAuthStateChanged( user => {
         if (user) {
             setLoggedIn(true);
+            //firebase.auth().currentUser.displayName);
         }
         else {
             setLoggedIn(false);
@@ -57,7 +58,7 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: localStorage.getItem('userEmail'),
+            owner: firebase.auth().currentUser.displayName,
             id: (Math.random()*100000000).toString()
         }
     };
@@ -145,7 +146,7 @@ const App = () => {
     const userPanel = loggedIn ? 
          <>
             <div className="user-panel d-flex">
-                <div className="greeting mr-2">Hello, {user}</div> 
+                <div className="greeting mr-2">Hello, {firebase.auth().currentUser.displayName}</div> 
                 <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
             </div>
             
