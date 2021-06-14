@@ -5,7 +5,6 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-//import UsernameForm from '../username/username';
 import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
@@ -31,14 +30,14 @@ const App = () => {
     const [signInType, setSignInType] = useState('login');
 
     firebase.auth().onAuthStateChanged( userObj => {
-        if (userObj) {
+        if (userObj && signInType === 'login') {
             user = firebase.auth().currentUser;
             setLoggedIn(true);
-            console.log(`${user.displayName} logged in`);
+            //console.log(`${user.displayName} logged in`);
         }
         else {
             setLoggedIn(false);
-            console.log('noone logged in');
+            //console.log('No authorized users online');
         }
     })
 
@@ -115,7 +114,7 @@ const App = () => {
     }
 
     const handleLogOut = async () => {
-        await firebase.auth().signOut()
+        await firebase.auth().signOut();
     }
 
     const toggleDark = () => {
@@ -178,10 +177,7 @@ const App = () => {
                 <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                     onClick={() => setSignInType('login')}>log in</span></div>
                 </>
-            }
-            {/* <UsernameForm onLogin={handleLogin}/> */}
-            
-                
+            } 
         </>
 
     // ===== Styling ===============

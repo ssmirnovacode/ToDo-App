@@ -9,16 +9,6 @@ const initialRegState = {
     password2: ''
 }
 
-const handleRegister = (data) => {
-    firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
-    .then(() => firebase.auth().currentUser.updateProfile({
-        displayName: data.username,
-        photoURL: null
-    }))
-    .catch (err => console.error(err.message))
-
-}
-
 const RegisterForm = (props) => {
 
     const [regState, setRegState] = useState(initialRegState);
@@ -30,12 +20,22 @@ const RegisterForm = (props) => {
         });
     };
 
+    const handleRegister = (data) => {
+        firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+        .then(() => firebase.auth().currentUser.updateProfile({
+            displayName: data.username,
+            photoURL: null
+        }))
+        .then( () => props.onRegister())
+        .catch (err => console.error(err.message))
+    
+    }
+
     const onSubmit = (e) => {
         e.preventDefault();
         if (regState.password === regState.password2) {
             handleRegister(regState);
-            setRegState(initialRegState);  
-            props.onRegister(); // add animation/UX here
+            setRegState(initialRegState); 
         }
         else return;
         
@@ -64,10 +64,10 @@ const RegisterForm = (props) => {
                 onChange={onLabelChange} 
                 placeholder="Repeat your password"
                 value={regState.password2} />
+                {
+                    regState.password === regState.password2 ? null : <div className="err-message">Passwords don´t match!!</div>
+                }
             <button className="btn btn-outline-secondary" type="submit">Sign up</button>
-            {
-            regState.password === regState.password2 ? null : <div className="err-message">Passwords don´t match!!</div>
-            }
         </form>
         
     )
