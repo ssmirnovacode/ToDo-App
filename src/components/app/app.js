@@ -29,18 +29,6 @@ const App = () => {
 
     const [signInType, setSignInType] = useState('login');
 
-    firebase.auth().onAuthStateChanged( userObj => {
-        if (userObj && signInType === 'login') {
-            user = firebase.auth().currentUser;
-            setLoggedIn(true);
-            //console.log(`${user.displayName} logged in`);
-        }
-        else {
-            setLoggedIn(false);
-            //console.log('No authorized users online');
-        }
-    })
-
     useEffect( () => {
 
         db.collection('items').get().then(snapshot => {
@@ -51,6 +39,29 @@ const App = () => {
         .catch( err => console.error(err.message));
 
     }, []);
+
+    //====Firebase tools====================================
+
+    firebase.auth().onAuthStateChanged( userObj => {
+        if (userObj && signInType === 'login') {
+            user = firebase.auth().currentUser;
+            setLoggedIn(true);
+            //console.log(`${user.displayName} logged in`);
+        }
+        else {
+            setLoggedIn(false);
+            //console.log('No authorized users online');
+        }
+    });
+
+    const guestUserSignIn = () => {
+        firebase.auth().signInWithEmailAndPassword('guest@test.com', 'test123')
+        .then( () => {
+            setLoggedIn(true);
+            console.log(user);
+        })
+        .catch(err => console.error(err.message));
+    }
 
     //==============Methods ====================================================
 
@@ -142,7 +153,7 @@ const App = () => {
     const userPanel = loggedIn ? 
          <>
             <div className="user-panel d-flex">
-                <div className="greeting mr-2">Hello, {user && user.displayName}</div> 
+                <div className="greeting mr-2">Hello, {user && (user.displayName || 'Guest')}</div> 
                 <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
             </div>
             
@@ -170,6 +181,9 @@ const App = () => {
                 <LoginForm />
                 <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                     onClick={() => setSignInType('register')}>here</span></div>
+                <div className="descr mt-2">You can also sign-in as a <span className="login-span"
+                    onClick={guestUserSignIn}>guest</span><br/>
+                    If you choose to sign in as a guest, your data will be public.</div>
                 </>
                 : 
                 <>
@@ -177,7 +191,7 @@ const App = () => {
                 <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                     onClick={() => setSignInType('login')}>log in</span></div>
                     <div className="descr mt-2">For demo purposes email verification has been disabled.<br/> 
-                    You can register with an imaginary email (por example, test@test.com)</div>
+                    You can register with an imaginary email (for example, test@test.com)</div>
                 </>
             } 
         </>
