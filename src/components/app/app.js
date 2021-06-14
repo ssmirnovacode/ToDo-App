@@ -33,11 +33,11 @@ const App = () => {
         if (userObj && signInType === 'login') {
             user = firebase.auth().currentUser;
             setLoggedIn(true);
-            //console.log(`${user.displayName} logged in`);
+
         }
         else {
             setLoggedIn(false);
-            //console.log('No authorized users online');
+
         }
     })
 
@@ -46,7 +46,6 @@ const App = () => {
         db.collection('items').get().then(snapshot => {
             const todos = firebaseLooper(snapshot);
             setItems(todos);
-            //console.log('useEffect ran');
         })
         .catch( err => console.error(err.message));
 
