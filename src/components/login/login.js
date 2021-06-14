@@ -13,7 +13,6 @@ const initialLoginState = {
 const LoginForm = (props) => {
     //localStorage.clear();
     const [loginState, setLoginState] = useState(initialLoginState);
-
     const onLabelChange = (e) => {
         setLoginState(loginState => ({
             ...loginState,
@@ -27,21 +26,15 @@ const LoginForm = (props) => {
     const onSubmit = (e) => {
         e.preventDefault();
         firebase.auth().signInWithEmailAndPassword(loginState.user.email, loginState.user.password)
-        .then(res => {
-            if (res.code) {
-                setLoginState(loginState => ({
-                    ...loginState,
-                    loginError: res.message
-                }))
-            }
-            else {
-                props.onLogin(loginState.user.email);
-                localStorage.setItem('userEmail', loginState.user.email);
-                setLoginState(initialLoginState);
-            }
+        .then(() => {
+            localStorage.setItem('userEmail', loginState.user.email);
+            setLoginState(initialLoginState);   
+            props.onLogin(loginState.user.email);       
         })
-        .catch(err => console.error(err.message));
-          
+        .catch(err => setLoginState(loginState => ({
+            ...loginState,
+            loginError: err.message
+        })));  
     }
 
     return(
@@ -56,10 +49,10 @@ const LoginForm = (props) => {
                 onChange={onLabelChange} 
                 placeholder="Enter your password"
                 value={loginState.password} />
-            <button className="btn btn-outline-secondary" type="submit">Login</button>
-            {
+                {
                 loginState.loginError ? <div className="err-message">{loginState.loginError}</div> : null
-            }
+                }
+            <button className="btn btn-outline-secondary" type="submit">Login</button>     
         </form>
     )
 }
