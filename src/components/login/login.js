@@ -1,26 +1,47 @@
 import React, {useState} from 'react';
 import './login.scss';
+import firebase from '../../firebase.config';
 
 const initialLoginState = {
-    username: '',
-    password: ''
+    loginError: '',
+    user: {
+        email: '',
+        password: ''
+    }
 };
 
 const LoginForm = (props) => {
-
+    //localStorage.clear();
     const [loginState, setLoginState] = useState(initialLoginState);
 
     const onLabelChange = (e) => {
-        setLoginState({
+        setLoginState(loginState => ({
             ...loginState,
-            [e.target.name]: e.target.value
-        });
+            user: {
+                ...loginState.user,
+                [e.target.name]: e.target.value
+            }
+        }));
     };
 
     const onSubmit = (e) => {
         e.preventDefault();
-        props.onLogin(loginState); // to be changed
-        setLoginState(initialLoginState);  
+        firebase.auth().signInWithEmailAndPassword(loginState.user.email, loginState.user.password)
+        .then(res => {
+            if (res.code) {
+                setLoginState(loginState => ({
+                    ...loginState,
+                    loginError: res.message
+                }))
+            }
+            else {
+                props.onLogin(loginState.user.email);
+                localStorage.setItem('userEmail', loginState.user.email);
+                setLoginState(initialLoginState);
+            }
+        })
+        .catch(err => console.error(err.message));
+          
     }
 
     return(
@@ -30,12 +51,15 @@ const LoginForm = (props) => {
                 onChange={onLabelChange} 
                 placeholder="Enter your email"
                 value={loginState.email} />
-            <label htmlFor="pass">Password: </label>
-            <input required type="password" className="form-control" name="pass"
+            <label htmlFor="password">Password: </label>
+            <input required type="password" className="form-control" name="password"
                 onChange={onLabelChange} 
                 placeholder="Enter your password"
                 value={loginState.password} />
             <button className="btn btn-outline-secondary" type="submit">Login</button>
+            {
+                loginState.loginError ? <div className="err-message">{loginState.loginError}</div> : null
+            }
         </form>
     )
 }

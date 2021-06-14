@@ -14,7 +14,7 @@ import LoginForm from '../login/login';
 
 const App = () => {
 
-    const user = localStorage.getItem('user') || '';
+    const user = localStorage.getItem('userEmail') || '';
 
     //==============State hooks====================================================
 
@@ -49,7 +49,7 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: localStorage.getItem('user'),
+            owner: localStorage.getItem('userEmail'),
             id: (Math.random()*100000000).toString()
         }
     };
@@ -104,7 +104,7 @@ const App = () => {
     }
 
     const handleLogin = (username) => { // change it to the auth code with Firebase
-        //localStorage.setItem('user', username);
+        localStorage.setItem('userEmail', username);
         setLoggedIn(true);
     }
 
@@ -158,13 +158,13 @@ const App = () => {
             {
                 signInType === 'login' ? 
                 <>
-                <LoginForm />
+                <LoginForm onLogin={handleLogin} />
                 <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                     onClick={() => setSignInType('register')}>here</span></div>
                 </>
                 : 
                 <>
-                <RegisterForm />
+                <RegisterForm onRegister={() => setSignInType('login')} />
                 <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                     onClick={() => setSignInType('login')}>log in</span></div>
                 </>
