@@ -10,6 +10,7 @@ import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
 import RegisterForm from '../register/register';
 import LoginForm from '../login/login';
+import UserPanel from '../user-panel/user-panel';
 
 const App = () => {
 
@@ -149,17 +150,6 @@ const App = () => {
     const doneCount = userItems.filter(el => el.done === true).length;
     const pendingCount = userItems.length - doneCount;
 
-    // ===== User panel viewed after login ===============
-    const userPanel = loggedIn ? 
-         <>
-            <div className="user-panel d-flex">
-                <div className="greeting mr-2">Hello, {user && (user.displayName || 'Guest')}</div> 
-                <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
-            </div>
-            
-        </>
-        : null;
-
     // ===== Todo list view based on if logged in or not ===============
     const list = loggedIn ? 
         <>
@@ -183,7 +173,7 @@ const App = () => {
                     onClick={() => setSignInType('register')}>here</span></div>
                 <div className="descr mt-2">You can also sign-in as a <span className="login-span"
                     onClick={guestUserSignIn}>guest</span><br/>
-                    If you choose to sign in as a guest, your data will be public.</div>
+                    If you choose to sign in as a guest, your data will be public!</div>
                 </>
                 : 
                 <>
@@ -199,7 +189,7 @@ const App = () => {
     // ===== Styling ===============
     return(
         <div className={dark ? "todo-app darkmode" : "todo-app"}>
-            {userPanel}
+            {loggedIn && <UserPanel name={user.displayName} handleLogOut={handleLogOut} /> }
             <div className="dark-toggle custom-control custom-switch mt-3 mb-2">
                 <label className="custom-control-label" htmlFor="customSwitch1">Dark mode</label>
                 <input type="checkbox" className="custom-control-input" id="customSwitch1" 
