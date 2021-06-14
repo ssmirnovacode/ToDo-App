@@ -62,7 +62,7 @@ const RegisterForm = (props) => {
                 value={regState.password2} />
             <button className="btn btn-outline-secondary" type="submit">Sign up</button>
             {
-            regState.password === regState.password2 ? null : <div>Passwords don´t match!!</div>
+            regState.password === regState.password2 ? null : <div className="err-message">Passwords don´t match!!</div>
             }
         </form>
         

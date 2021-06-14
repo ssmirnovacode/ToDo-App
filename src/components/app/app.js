@@ -10,6 +10,7 @@ import { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
 import RegisterForm from '../register/register';
+import LoginForm from '../login/login';
 
 const App = () => {
 
@@ -26,6 +27,8 @@ const App = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const [dark, setDark] = useState(false);
+
+    const [signInType, setSignInType] = useState('login');
 
 
     useEffect( () => {
@@ -152,9 +155,22 @@ const App = () => {
         : 
         <>
             <h1>ToDo List</h1>
-            <RegisterForm />
+            {
+                signInType === 'login' ? 
+                <>
+                <LoginForm />
+                <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
+                    onClick={() => setSignInType('register')}>here</span></div>
+                </>
+                : 
+                <>
+                <RegisterForm />
+                <div className="descr mt-2">Already registered? Please  <span className="login-span" 
+                    onClick={() => setSignInType('login')}>log in</span></div>
+                </>
+            }
             {/* <UsernameForm onLogin={handleLogin}/> */}
-            <div className="descr mt-2">Please log in or register</div>
+            
                 
         </>
 

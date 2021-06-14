@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import './login.scss';
 
 const initialLoginState = {
     username: '',
@@ -23,13 +24,14 @@ const LoginForm = (props) => {
     }
 
     return(
-        <form className="item-add-form d-flex" onSubmit={onSubmit}>
-             <input required type="email" className="form-control" name="email-reg"
+        <form className="login-form d-flex" onSubmit={onSubmit}>
+            <label htmlFor="email">Email: </label>
+             <input required type="email" className="form-control" name="email"
                 onChange={onLabelChange} 
                 placeholder="Enter your email"
                 value={loginState.email} />
-            <label htmlFor="pass-reg">Password: </label>
-            <input required type="password" className="form-control" name="pass-reg"
+            <label htmlFor="pass">Password: </label>
+            <input required type="password" className="form-control" name="pass"
                 onChange={onLabelChange} 
                 placeholder="Enter your password"
                 value={loginState.password} />
