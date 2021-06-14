@@ -5,7 +5,7 @@ import AppHeader from '../app-header/app-header';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
-import UsernameForm from '../username/username';
+//import UsernameForm from '../username/username';
 import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
@@ -14,7 +14,7 @@ import LoginForm from '../login/login';
 
 const App = () => {
 
-    const user = localStorage.getItem('userEmail') || '';
+    let user = firebase.auth().currentUser || null;
 
     //==============State hooks====================================================
 
@@ -30,18 +30,20 @@ const App = () => {
 
     const [signInType, setSignInType] = useState('login');
 
-    firebase.auth().onAuthStateChanged( user => {
-        if (user) {
+    firebase.auth().onAuthStateChanged( userObj => {
+        if (userObj) {
+            user = firebase.auth().currentUser;
             setLoggedIn(true);
-            //firebase.auth().currentUser.displayName);
+            console.log(`${user.displayName} logged in`);
         }
         else {
             setLoggedIn(false);
+            console.log('noone logged in');
         }
     })
 
     useEffect( () => {
-        //localStorage.clear();
+
         db.collection('items').get().then(snapshot => {
             const todos = firebaseLooper(snapshot);
             setItems(todos);
@@ -58,7 +60,7 @@ const App = () => {
             label,
             important: false,
             done: false,
-            owner: firebase.auth().currentUser.displayName,
+            owner: user.uid,
             id: (Math.random()*100000000).toString()
         }
     };
@@ -69,7 +71,7 @@ const App = () => {
         setItems(items => ([...items, newItem]));
     };
 
-    const deleteItem = async id => { // pending method
+    const deleteItem = async id => { 
         if (window.confirm('Are you sure you want to delete this item?')) {
             await db.doc(`items/${id}`).delete();
             const idX = items.findIndex(item => item.id === id);
@@ -112,11 +114,6 @@ const App = () => {
         setFilter(filterName);
     }
 
-    const handleLogin = (username) => { // change it to the auth code with Firebase
-        localStorage.setItem('userEmail', username);
-        //setLoggedIn(true);
-    }
-
     const handleLogOut = async () => {
         await firebase.auth().signOut()
     }
@@ -126,7 +123,7 @@ const App = () => {
     };
 
     // ===== Rendering options ===============
-    const visibleItems = items && items.filter(item => item.owner === user)
+    const visibleItems = items && items.filter(item => user && item.owner === user.uid)
                                 .filter(item => item.label.toLowerCase().indexOf(pattern.toLowerCase()) > -1)
                                 .filter(item => {
                                     if (filter === 'done') {
@@ -146,7 +143,7 @@ const App = () => {
     const userPanel = loggedIn ? 
          <>
             <div className="user-panel d-flex">
-                <div className="greeting mr-2">Hello, {firebase.auth().currentUser.displayName}</div> 
+                <div className="greeting mr-2">Hello, {user && user.displayName}</div> 
                 <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
             </div>
             
@@ -171,7 +168,7 @@ const App = () => {
             {
                 signInType === 'login' ? 
                 <>
-                <LoginForm onLogin={handleLogin} />
+                <LoginForm />
                 <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                     onClick={() => setSignInType('register')}>here</span></div>
                 </>

@@ -11,7 +11,7 @@ const initialLoginState = {
 };
 
 const LoginForm = (props) => {
-    localStorage.clear();
+
     const [loginState, setLoginState] = useState(initialLoginState);
     const onLabelChange = (e) => {
         setLoginState(loginState => ({
@@ -27,9 +27,7 @@ const LoginForm = (props) => {
         e.preventDefault();
         firebase.auth().signInWithEmailAndPassword(loginState.user.email, loginState.user.password)
         .then(() => {
-            localStorage.setItem('userEmail', loginState.user.email);
-            setLoginState(initialLoginState);   
-            props.onLogin(loginState.user.email);       
+            setLoginState(initialLoginState);      
         })
         .catch(err => setLoginState(loginState => ({
             ...loginState,
