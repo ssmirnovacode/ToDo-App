@@ -26,6 +26,7 @@ const RegisterForm = (props) => {
             displayName: data.username,
             photoURL: null
         }))
+        //.then( () => firebase.auth().currentUser.sendEmailVerification().then(() => console.log('Email sent')) )
         .then( () => props.onRegister())
         .catch (err => console.error(err.message))
     
