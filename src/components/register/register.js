@@ -34,7 +34,7 @@ const RegisterForm = (props) => {
             setRegState(initialRegState);  
             props.onRegister(); // add animation/UX here
         }
-        else console.log('The passwords dont match');
+        else return;
         
     }
 

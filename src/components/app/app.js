@@ -6,7 +6,7 @@ import ItemStatusFilter from '../item-status-filter/item-status-filter';
 import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import UsernameForm from '../username/username';
-import { db } from '../../firebase.config';
+import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
 import RegisterForm from '../register/register';
@@ -30,6 +30,14 @@ const App = () => {
 
     const [signInType, setSignInType] = useState('login');
 
+    firebase.auth().onAuthStateChanged( user => {
+        if (user) {
+            setLoggedIn(true);
+        }
+        else {
+            setLoggedIn(false);
+        }
+    })
 
     useEffect( () => {
         //localStorage.clear();
@@ -105,7 +113,11 @@ const App = () => {
 
     const handleLogin = (username) => { // change it to the auth code with Firebase
         localStorage.setItem('userEmail', username);
-        setLoggedIn(true);
+        //setLoggedIn(true);
+    }
+
+    const handleLogOut = async () => {
+        await firebase.auth().signOut()
     }
 
     const toggleDark = () => {
@@ -134,7 +146,7 @@ const App = () => {
          <>
             <div className="user-panel d-flex">
                 <div className="greeting mr-2">Hello, {user}</div> 
-                <button className="btn btn-outline-secondary logout" onClick={() => setLoggedIn(false)}>Log out</button>            
+                <button className="btn btn-outline-secondary logout" onClick={handleLogOut}>Log out</button>            
             </div>
             
         </>
