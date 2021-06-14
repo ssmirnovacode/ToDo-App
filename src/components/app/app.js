@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import SearchPanel from '../search-panel/search-panel';
-import TodoList from '../todo-list/todo-list';
-import AppHeader from '../app-header/app-header';
-import ItemStatusFilter from '../item-status-filter/item-status-filter';
-import ItemAddForm from '../item-add-form/item-add-form';
+//import SearchPanel from '../search-panel/search-panel';
+//import TodoList from '../todo-list/todo-list';
+//import AppHeader from '../app-header/app-header';
+//import ItemStatusFilter from '../item-status-filter/item-status-filter';
+//import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
-import RegisterForm from '../register/register';
-import LoginForm from '../login/login';
+//import RegisterForm from '../register/register';
+//import LoginForm from '../login/login';
 import UserPanel from '../user-panel/user-panel';
+import Content from '../content/content';
 
 const App = () => {
 
@@ -151,7 +152,7 @@ const App = () => {
     const pendingCount = userItems.length - doneCount;
 
     // ===== Todo list view based on if logged in or not ===============
-    const list = loggedIn ? 
+    /* const content = loggedIn ? 
         <>
             <AppHeader toDo={pendingCount} done={doneCount} />
             <div className="top-panel d-flex">
@@ -184,9 +185,9 @@ const App = () => {
                     You can register with an imaginary email (for example, test@test.com)</div>
                 </>
             } 
-        </>
+        </> */
 
-    // ===== Styling ===============
+    // ===== Styling and composing ===============
     return(
         <div className={dark ? "todo-app darkmode" : "todo-app"}>
             {loggedIn && <UserPanel name={user.displayName} handleLogOut={handleLogOut} /> }
@@ -195,7 +196,11 @@ const App = () => {
                 <input type="checkbox" className="custom-control-input" id="customSwitch1" 
                     value={dark} onChange={toggleDark}/>
             </div>
-            {list}
+            {/* {content} */}
+            <Content loggedIn={loggedIn} pendingCount={pendingCount} doneCount={doneCount} pattern={pattern} searchItems={searchItems} 
+                filter={filter} onSwitchFilter={onSwitchFilter} dark={dark} visibleItems={visibleItems} 
+                deleteItem={deleteItem} toggleDone={toggleDone} toggleImportant={toggleImportant}
+                 addItem={addItem} signInType={signInType} setSignInType={setSignInType} guestUserSignIn={guestUserSignIn} />
             <Footer darkmode={dark} />
         </div>
     )    
