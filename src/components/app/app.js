@@ -1,15 +1,8 @@
 import React, {useEffect, useState} from 'react';
-//import SearchPanel from '../search-panel/search-panel';
-//import TodoList from '../todo-list/todo-list';
-//import AppHeader from '../app-header/app-header';
-//import ItemStatusFilter from '../item-status-filter/item-status-filter';
-//import ItemAddForm from '../item-add-form/item-add-form';
 import './app.scss';
 import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
-//import RegisterForm from '../register/register';
-//import LoginForm from '../login/login';
 import UserPanel from '../user-panel/user-panel';
 import Content from '../content/content';
 
