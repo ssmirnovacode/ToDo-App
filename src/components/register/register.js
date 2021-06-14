@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { db } from '../../firebase.config';
+import './register.scss';
+import firebase from '../../firebase.config';
 
 const initialRegState = {
     username: '',
@@ -9,6 +10,9 @@ const initialRegState = {
 }
 
 const handleRegister = (data) => {
+    firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+    .then(res => console.log(res))
+    .catch (err => console.error(err.message))
 
 }
 
@@ -25,34 +29,43 @@ const RegisterForm = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        handleRegister(regState); // to be changed
-        setRegState(initialRegState);  
+        if (regState.password === regState.password2) {
+            handleRegister(regState);
+            setRegState(initialRegState);  
+        }
+        else console.log('The passwords dont match');
+        
     }
 
     return(
-        <form className="item-add-form d-flex" onSubmit={onSubmit}>
-            <label htmlFor="username-reg">Email: </label>
-            <input required type="email" className="form-control" name="username-reg"
+
+        <form className="register-form d-flex" onSubmit={onSubmit}>
+            <label htmlFor="username">Username: </label>
+            <input required type="text" className="form-control" name="username"
                 onChange={onLabelChange} 
                 placeholder="Enter your name"
                 value={regState.username} />
-            <label htmlFor="email-reg">Email: </label>
-            <input required type="email" className="form-control" name="email-reg"
+            <label htmlFor="email">Email: </label>
+            <input required type="email" className="form-control" name="email"
                 onChange={onLabelChange} 
                 placeholder="Enter your email"
                 value={regState.email} />
-            <label htmlFor="pass-reg">Password: </label>
-            <input required type="password" className="form-control" name="pass-reg"
+            <label htmlFor="pass">Password: </label>
+            <input required type="password" className="form-control" name="password"
                 onChange={onLabelChange} 
                 placeholder="Enter your password"
                 value={regState.password} />
-            <label htmlFor="pass-2-reg">Repeat password: </label>
-            <input required type="password" className="form-control" name="pass-2-reg"
+            <label htmlFor="pass-2">Repeat password: </label>
+            <input required type="password" className="form-control" name="password2"
                 onChange={onLabelChange} 
                 placeholder="Repeat your password"
                 value={regState.password2} />
             <button className="btn btn-outline-secondary" type="submit">Sign up</button>
+            {
+            regState.password === regState.password2 ? null : <div>Passwords don´t match!!</div>
+            }
         </form>
+        
     )
 }
 
