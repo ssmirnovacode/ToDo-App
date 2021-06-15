@@ -11,7 +11,8 @@ import RegisterForm from '../register/register';
 const Content = props => {
 
     const{ loggedIn, pendingCount, doneCount, pattern, searchItems, filter, onSwitchFilter, dark, visibleItems, 
-        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn} = props;
+        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn, 
+        confirmEmailSent, setConfirmEmailSent} = props;
 
     return(
         <>
@@ -33,6 +34,9 @@ const Content = props => {
                     {
                         signInType === 'login' ? 
                         <>
+                        {
+                            confirmEmailSent && <div className="warning-span mb-3">Please check your email and confirm your registration.</div>
+                        }
                         <LoginForm />
                         <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                             onClick={() => setSignInType('register')}>here</span></div>
@@ -42,7 +46,7 @@ const Content = props => {
                         </>
                         : 
                         <>
-                        <RegisterForm onRegister={() => setSignInType('login')} />
+                        <RegisterForm setConfirmEmailSent={setConfirmEmailSent} onRegister={() => setSignInType('login')} />
                         <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                             onClick={() => setSignInType('login')}>log in</span></div>
                             <div className="descr mt-2">For demo purposes email verification has been disabled.
