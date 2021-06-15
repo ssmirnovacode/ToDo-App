@@ -39,6 +39,7 @@ const App = () => {
     firebase.auth().onAuthStateChanged( userObj => {
         if (userObj && signInType === 'login' && firebase.auth().currentUser.emailVerified) {
             user = firebase.auth().currentUser;
+            //confirmEmailSent && setConfirmEmailSent(false);
             setLoggedIn(true);
             //console.log(user);
             //console.log(`${user.displayName} logged in`);

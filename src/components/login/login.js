@@ -26,13 +26,21 @@ const LoginForm = (props) => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        if (props.confirmEmailSent) {
+            setLoginState(loginState => ({
+                ...loginState,
+                loginError: 'Please confirm your email or reload the page'
+            }));
+            return;
+        }
         firebase.auth().signInWithEmailAndPassword(loginState.user.email, loginState.user.password)
+        .then( () => props.setConfirmEmailSent(false))
         .then(() => {
             setLoginState(initialLoginState);      
         })
         .catch(err => setLoginState(loginState => ({
             ...loginState,
-            loginError: err.message
+            loginError: err.message === 'The email address is badly formatted.' ? 'Please confirm your email or reload the page' : err.message
         })));  
     }
 

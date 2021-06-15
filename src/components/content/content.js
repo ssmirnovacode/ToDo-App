@@ -7,6 +7,7 @@ import TodoList from '../todo-list/todo-list';
 import ItemAddForm from '../item-add-form/item-add-form';
 import LoginForm from '../login/login';
 import RegisterForm from '../register/register';
+//import firebase from '../../firebase.config';
 
 const Content = props => {
 
@@ -35,9 +36,9 @@ const Content = props => {
                         signInType === 'login' ? 
                         <>
                         {
-                            confirmEmailSent && <div className="warning-span mb-3">Please check your email and confirm your registration.</div>
+                            confirmEmailSent && /* !firebase.auth().currentUser.emailVerified && */ <div className="warning-span mb-3">Please check your email and confirm your registration.</div>
                         }
-                        <LoginForm />
+                        <LoginForm confirmEmailSent={confirmEmailSent}  setConfirmEmailSent={setConfirmEmailSent}/>
                         <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                             onClick={() => setSignInType('register')}>here</span></div>
                         <div className="descr mt-2">You can also sign-in as a <span className="login-span"
