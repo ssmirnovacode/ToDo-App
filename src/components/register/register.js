@@ -39,7 +39,6 @@ const RegisterForm = (props) => {
             setRegState(initialRegState); 
         }
         else return;
-        
     }
 
     return(

@@ -11,7 +11,7 @@ import RegisterForm from '../register/register';
 const Content = props => {
 
     const{ loggedIn, pendingCount, doneCount, pattern, searchItems, filter, onSwitchFilter, dark, visibleItems, 
-        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn} = props;
+            deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn} = props;
 
     return(
         <>
@@ -46,7 +46,8 @@ const Content = props => {
                         <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                             onClick={() => setSignInType('login')}>log in</span></div>
                             <div className="descr mt-2">The app rules allow you sign up with an imaginary email (for example, test@test.com). 
-                            <span className="warning-span"> Please note that you won´t be able to reset your password by email in that case</span></div>
+                                <span className="warning-span"> Please note that you won´t be able to reset your password by email in that case</span>
+                            </div>
                         </>
                     } 
                 </>

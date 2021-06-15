@@ -38,12 +38,9 @@ const App = () => {
         if (userObj && signInType === 'login') {
             user = firebase.auth().currentUser;
             setLoggedIn(true);
-            //console.log(user);
-            //console.log(`${user.displayName} logged in`);
         }
         else {
             setLoggedIn(false);
-            //console.log('No authorized users online');
         }
     });
 
