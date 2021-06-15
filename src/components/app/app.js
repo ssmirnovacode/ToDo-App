@@ -24,8 +24,6 @@ const App = () => {
 
     const [signInType, setSignInType] = useState('login');
 
-    const [confirmEmailSent, setConfirmEmailSent] = useState(false);
-
     useEffect( () => {
         db.collection('items').get().then(snapshot => {
             const todos = firebaseLooper(snapshot);
@@ -37,9 +35,8 @@ const App = () => {
     //====Firebase tools====================================
 
     firebase.auth().onAuthStateChanged( userObj => {
-        if (userObj && signInType === 'login' && firebase.auth().currentUser.emailVerified) {
+        if (userObj && signInType === 'login') {
             user = firebase.auth().currentUser;
-            //confirmEmailSent && setConfirmEmailSent(false);
             setLoggedIn(true);
             //console.log(user);
             //console.log(`${user.displayName} logged in`);
@@ -54,7 +51,7 @@ const App = () => {
         firebase.auth().signInWithEmailAndPassword('guest@test.com', 'test123')
         .then( () => {
             setLoggedIn(true);
-            //console.log(user);
+            console.log(user);
         })
         .catch(err => console.error(err.message));
     }
@@ -147,7 +144,7 @@ const App = () => {
 
     const contentProps = {
         loggedIn, pendingCount, doneCount, pattern, searchItems, filter, onSwitchFilter, dark, visibleItems, 
-        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn, confirmEmailSent, setConfirmEmailSent
+        deleteItem, toggleDone, toggleImportant, addItem, signInType, setSignInType, guestUserSignIn
     }
 
     return(
