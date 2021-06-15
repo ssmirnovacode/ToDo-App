@@ -3,6 +3,7 @@ import './login.scss';
 import firebase from '../../firebase.config';
 
 const initialLoginState = {
+    isResetEmailSent: false,
     loginError: '',
     user: {
         email: '',
@@ -35,6 +36,18 @@ const LoginForm = (props) => {
         })));  
     }
 
+    const resetPassword = () => {
+        firebase.auth().sendPasswordResetEmail(loginState.user.email)
+        .then(() => setLoginState(loginState =>({
+            ...loginState,
+            isResetEmailSent: true
+        })))
+        .catch(err => setLoginState(loginState => ({
+            ...loginState,
+            loginError: err.message
+        })));
+    }
+
     return(
         <form className="login-form d-flex" onSubmit={onSubmit}>
             <label htmlFor="email">Email: </label>
@@ -50,6 +63,12 @@ const LoginForm = (props) => {
                 {
                 loginState.loginError ? <div className="err-message">{loginState.loginError}</div> : null
                 }
+            
+            {
+                loginState.isResetEmailSent ? 
+                <span className="login-span email-sent">Password reset instructions have been sent to <span className="login-span">{loginState.user.email}</span></span> : 
+                <span className="login-span" onClick={resetPassword}>Forgot your password?</span>
+            }
             <button className="btn btn-outline-secondary" type="submit">Login</button>     
         </form>
     )

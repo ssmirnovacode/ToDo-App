@@ -6,3 +6,18 @@
 .err-message {
     color: tomato;
 }
+
+.login-span {
+    cursor: pointer;
+    font-weight: bold;
+    color: #17a2b8;
+    &:hover {
+        text-decoration: underline;
+    }
+    &.email-sent {
+        color: inherit;
+        &:hover {
+            text-decoration:none;
+        }
+    }
+}
