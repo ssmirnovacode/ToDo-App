@@ -13,9 +13,7 @@
   }
 }
 
-.top-panel {
-  margin: 1rem 0;
-}
+
 
 .user-panel {
   justify-content: space-between;
@@ -27,15 +25,7 @@
   color: inverse;
 }
 
-.descr .login-span {
-  cursor: pointer;
-  font-weight: bold;
-  color: #17a2b8;
-  font-size: 1.1rem;
-  &:hover {
-    text-decoration: underline;
-}
-}
+
 
 .dark-toggle {
   text-align: right;

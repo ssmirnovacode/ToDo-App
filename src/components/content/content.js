@@ -36,8 +36,8 @@ const Content = props => {
                         <div className="descr mt-2">If you are not registered yet, you can sign up <span className="login-span" 
                             onClick={() => setSignInType('register')}>here</span></div>
                         <div className="descr mt-2">You can also sign-in as a <span className="login-span"
-                            onClick={guestUserSignIn}>guest</span><br/>
-                            If you choose to sign in as a guest, your data will be public!</div>
+                            onClick={guestUserSignIn}>guest </span>
+                            (your data will be public)</div>
                         </>
                         : 
                         <>
