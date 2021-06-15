@@ -1,14 +1,21 @@
-.descr .login-span {
+.descr {
+  & .login-span {
     cursor: pointer;
     font-weight: bold;
     color: #17a2b8;
     font-size: 1.1rem;
     &:hover {
       text-decoration: underline;
+    }
+  }
+  & .warning-span {
+    color: tomato;
   }
 }
 
 .top-panel {
     margin: 1rem 0;
   }
+
+
 

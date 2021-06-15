@@ -1,4 +1,5 @@
 import React from 'react';
+import './content.scss';
 import AppHeader from '../app-header/app-header';
 import SearchPanel from '../search-panel/search-panel';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';
@@ -44,8 +45,9 @@ const Content = props => {
                         <RegisterForm onRegister={() => setSignInType('login')} />
                         <div className="descr mt-2">Already registered? Please  <span className="login-span" 
                             onClick={() => setSignInType('login')}>log in</span></div>
-                            <div className="descr mt-2">For demo purposes email verification has been disabled.<br/> 
-                            You can register with an imaginary email (for example, test@test.com)</div>
+                            <div className="descr mt-2">For demo purposes email verification has been disabled.
+                            You can sign up with an imaginary email (for example, test@test.com). 
+                            <span className="warning-span"> Please note that you won´t be able to recover your password in that case</span></div>
                         </>
                     } 
                 </>
