@@ -1,6 +1,6 @@
 # ToDo App
 
-A CRUD Todo app implemented with FirebaseCloud Firestore allowing you to:
+A CRUD Todo app implemented with Firebase Cloud Firestore allowing you to:
  - register and log in with email and password 
  - add, delete ToDo items and toggle their status ('done' and/or 'important')
  - search through your ToDo items
