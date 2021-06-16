@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './user-panel.scss';
 import firebase from '../../firebase.config';
 
@@ -9,7 +9,6 @@ const UserPanel = (props) => {
     const {name, handleLogOut} = props;
 
     const changeEmail = () => {
-        setErrMessage('');
         if (firebase.auth().currentUser.uid !== 'pMzXQLXTikecjjABwy3vAnyipGC3') {
             const newEmail = prompt('Enter new email. You will have to sign in again with the email indicated.');
             newEmail && firebase.auth().currentUser.updateEmail(newEmail)
@@ -22,7 +21,6 @@ const UserPanel = (props) => {
     };
 
     const changePassword = () => {
-        setErrMessage('');
         if (firebase.auth().currentUser.uid !== 'pMzXQLXTikecjjABwy3vAnyipGC3') {
             const newPassword = prompt('Enter new password. You will have to sign in again with new password.');
             newPassword && firebase.auth().currentUser.updatePassword(newPassword)
@@ -33,6 +31,12 @@ const UserPanel = (props) => {
             setErrMessage('Guest users are not allowed to change password');
         }
     };
+
+    useEffect( () => {
+        const timerId = setTimeout(() => setErrMessage(''), 2000);
+        console.log('timeout set');
+        return () => clearInterval(timerId);
+    }, [errMessage]);
     
     return(
         <>

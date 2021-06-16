@@ -1,3 +1,53 @@
 .user-panel.message {
     color: tomato;
 }
+
+@media (hover: hover) {
+    .btn.btn-outline-danger {
+      &:hover {
+        background-color: #dc3545;
+        color: white;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: #dc3545;
+          color: black;
+          cursor:pointer;
+        }
+      }
+      &.active:hover {
+        background-color: #dc3545;
+        color: white;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: #dc3545;
+          color: white;
+          cursor:pointer;
+        }
+      }
+    }  
+  }
+
+  @media (hover: none) {
+    .btn.logout {
+      &:hover {
+        background-color: inherit;
+        color: inherit; // #dc3545;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: black;
+          color: inherit; // #dc3545;
+          cursor:pointer;
+        }
+      }
+      &.active:hover {
+        background-color: #dc3545;
+        color: white;   
+        cursor:pointer;
+        &.darkmode{
+          background-color: #dc3545;
+          color: white;
+          cursor:pointer;
+        }
+      }
+    }  
+  }
