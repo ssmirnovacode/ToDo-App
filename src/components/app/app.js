@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './app.scss';
+import './app.module.scss';
 import firebase, { db } from '../../firebase.config';
 import Footer from '../footer/footer';
 import { firebaseLooper } from '../../utils/tools';
