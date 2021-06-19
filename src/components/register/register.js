@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './register.scss';
+import '../../scss/components/register.scss';
 import firebase from '../../firebase.config';
 
 const initialRegState = {

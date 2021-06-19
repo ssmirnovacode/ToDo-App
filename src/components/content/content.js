@@ -1,5 +1,5 @@
 import React from 'react';
-import './content.scss';
+import '../../scss/components/content.scss';
 import AppHeader from '../app-header/app-header';
 import SearchPanel from '../search-panel/search-panel';
 import ItemStatusFilter from '../item-status-filter/item-status-filter';

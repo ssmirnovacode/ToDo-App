@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './login.scss';
+import '../../scss/components/login.scss';
 import firebase from '../../firebase.config';
 
 const initialLoginState = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import './todo-list-item.scss';
+import '../../scss/components/todo-list-item.scss';
 
 const TodoListItem = (props) => {
  

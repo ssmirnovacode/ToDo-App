@@ -1,5 +1,5 @@
 import React from 'react';
-import './search-panel.scss';
+import '../../scss/components/search-panel.scss';
 
 const SearchPanel = ({value, onSearch}) => {
     return <input className="form-control search-input" placeholder="Search" 

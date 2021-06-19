@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './item-add-form.scss';
+import '../../scss/components/item-add-form.scss';
 
 const ItemAddForm = (props) => {
 

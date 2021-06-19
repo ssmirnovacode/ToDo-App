@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import './user-panel.scss';
+import '../../scss/components/user-panel.scss';
 import firebase from '../../firebase.config';
 
 const UserPanel = (props) => {
